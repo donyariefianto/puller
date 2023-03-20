@@ -135,6 +135,7 @@ class Processing {
             Custom_Unique_ID:CID,
             Type:TYPE,
             Data_Date:moment().format('YYYY-MM-DD'),
+            Time:moment().format('HH:mm:ss.SSS'),
             Detail:detail,
             Executed_Time:(t1 - t0)/1000 + " seconds."
         }
