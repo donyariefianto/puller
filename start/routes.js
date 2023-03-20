@@ -20,6 +20,7 @@ Route.group(() => {
     Route.get('/maritim-viewboard','ExternalRequestController.GetMaritimViewboard')
     Route.get('/maritim-meta','ExternalRequestController.GetMaritimMeta')
     Route.get('/maritim-area','ExternalRequestController.GetMaritimArea')
+    Route.get('/generate-anpr','ExternalRequestController.GetAnpr')
     Route.delete('/delete-dataset','ExternalRequestController.RemoveAllDataset')
 }).prefix('service/v1')
 

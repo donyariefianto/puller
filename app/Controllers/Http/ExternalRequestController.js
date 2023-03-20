@@ -3,6 +3,7 @@ const Maritim = use("App/Helpers/Maritim");
 const Daily = use("App/Helpers/Daily_Task");
 const MongoDb = use("App/Models/MongoDb");
 const Processing = use("App/Helpers/ShellScript");
+const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const fs = require('fs');
 
@@ -50,13 +51,13 @@ class ExternalRequestController {
     }
 
     async GetAnpr ({request, response}) {
-        const result = await MongoDb.findANPR({
-            crossTime:{
-                $gte: "2023-03-12T00:00:00+07:00",
-                $lt: "2023-03-14T00:00:00+07:00"
-            }
-        });
-        return response.json(result);
+        let {id_cam,id_cam_point,name} = request.all();
+        if (!id_cam||!id_cam_point||!name) {
+            return response.status(500).json("id_cam, id_cam_point, or name Invalid")
+        }
+        const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
+        const a = await Anpr.Generate_Anpr_Hourly(id_cam,id_cam_point,name,now);
+        return response.json(a)
     }
 
     async GetMaritimMeta({request,response}) {

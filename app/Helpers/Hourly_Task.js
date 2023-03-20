@@ -2,18 +2,13 @@
 const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const Processing = use("App/Helpers/Processing");
-
+const fs = require('fs');
 class Hourly_Task {
 
     async Generate_Anpr () {
         const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
-        var id_cam = [
-          {name:'Perempatan Gadang',id_cam:"13",id_cam_point:"104"},
-          {name:'Pertigaan Kacuk',id_cam:"5",id_cam_point:"103"},
-          {name:'Perbatasan Batu-Malang',id_cam:"9",id_cam_point:"105"},
-          {name:'Jembatan Kali Sari',id_cam:"1",id_cam_point:"101"}
-          
-        ]
+        let id_cam = fs.readFileSync('public/files/data_user/id_cam.json',{encoding:'utf8'});
+        id_cam = JSON.parse(id_cam).data
         try {
           for (const i of id_cam) {
             var t0 = performance.now();
@@ -26,7 +21,7 @@ class Hourly_Task {
             });
             var generate = await Processing.SavePublicDir(bodyContent);
             var t1 = performance.now();
-            if (generate.status) {
+            if (generate.status == 200) {
               await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.id_cam} successfully`,"60MINS","Scheduler60",t1,t0);
             }else{
               await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.id_cam} failed`,"60MINS","Scheduler60",t1,t0);
