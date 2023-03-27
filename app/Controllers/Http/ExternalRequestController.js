@@ -2,7 +2,7 @@
 const Maritim = use("App/Helpers/Maritim");
 const Daily = use("App/Helpers/Daily_Task");
 const MongoDb = use("App/Models/MongoDb");
-const Processing = use("App/Helpers/ShellScript");
+const Hourly_Task = use("App/Helpers/Hourly_Task");
 const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const fs = require('fs');
@@ -10,7 +10,7 @@ const fs = require('fs');
 class ExternalRequestController {
     
     async Testing({ request, response}){
-        const a = await Daily.InsertLast2Day();
+        const a = await Hourly_Task.Generate_Anpr();
         return response.json(a)
     }
 

@@ -27,6 +27,7 @@ class Hourly_Task {
               await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.id_cam} failed`,"60MINS","Scheduler60",t1,t0);
             }
           }
+          return 'Successfully generated'
         } catch (error) {
           await Processing.Create_Logs(`Generate 1 Hour Record Vehicle failed ${error.message}`,"60MINS","Scheduler60",0,0);
         }
