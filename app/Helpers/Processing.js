@@ -134,7 +134,7 @@ class Processing {
             Epoch:moment().unix(),
             Custom_Unique_ID:CID,
             Type:TYPE,
-            Data_Date:moment().format('YYYY-MM-DD'),
+            Data_Date:moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
             Time:moment().format('HH:mm:ss.SSS'),
             Detail:detail,
             Executed_Time:(t1 - t0)/1000 + " seconds."
@@ -142,7 +142,7 @@ class Processing {
         const requirement_insert = await this.Get_ExternalDataLayers(token_logs);
         try {
             await MongoDb.InsertData(requirement_insert.user_id, requirement_insert.id, requirement_insert.token, logs);
-            return 'succes create logs'
+            return 'succes create logs ' + moment().format('YYYY-MM-DD HH:mm:ss.SSS')
         } catch (e) {
             return e.message
         }
