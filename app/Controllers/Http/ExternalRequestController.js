@@ -10,7 +10,8 @@ const fs = require('fs');
 class ExternalRequestController {
     
     async Testing({ request, response}){
-        const a = await Hourly_Task.Generate_Anpr();
+        let {path} = request.all();
+        let a = fs.existsSync(path)
         return response.json(a)
     }
 
