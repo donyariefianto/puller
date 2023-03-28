@@ -5,6 +5,8 @@ const ShellScript = use("App/Helpers/ShellScript")
 const Processing = use("App/Helpers/Processing")
 const MongoDb = use("App/Models/MongoDb")
 const moment = require('moment');
+const Env = use('Env');
+const $HOME = Env.get('home')
 
 class Daily_Task {
 
@@ -12,7 +14,7 @@ class Daily_Task {
         const now = moment().utcOffset('+0700').format('YYYY-MM-DDT00:00:00Z');
         let h_1 = moment(now).subtract(1,'days').utcOffset('+0700').format();
         let hp1 = moment(h_1).add(1,'days').utcOffset('+0700').format();
-        let user = fs.readFileSync('public/files/data_user/cctv_last2day.json',{encoding:'utf8'});
+        let user = fs.readFileSync($HOME+'public/files/data_user/cctv_last2day.json',{encoding:'utf8'});
         user = JSON.parse(user).data
         for (const i of user) {
             const _delete_q = {externalDataToken:i.token,userId:Number(i.user),'detail.Data_Date':moment().subtract(3,'days').utcOffset('+0700').format('YYYY-MM-DD')};
@@ -52,7 +54,7 @@ class Daily_Task {
 
     async GenerateStatsDatasets () {
         try {
-            let user = fs.readFileSync('public/files/data_user/stats_dataset.json',{encoding:'utf8'});
+            let user = fs.readFileSync($HOME+'public/files/data_user/stats_dataset.json',{encoding:'utf8'});
             user = JSON.parse(user).user
             for (const i of user) {
                 var t0 = performance.now();
@@ -73,7 +75,7 @@ class Daily_Task {
     async Maritim_Meta () {
         try {
             var res = []
-            let user = fs.readFileSync('public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
+            let user = fs.readFileSync($HOME+'public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
             const meta_maritim = await Maritim.meta_maritim();
             for (const i of JSON.parse(user).data) {
                 var t0 = performance.now();
@@ -97,7 +99,7 @@ class Daily_Task {
     async Maritim_Viewboard () {
         try {
             var res = []
-            let user = fs.readFileSync('public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
+            let user = fs.readFileSync($HOME+'public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
             const viewboard_maritim = await Maritim.viewboard_maritim();
             for (const i of JSON.parse(user).data) {
                 var t0 = performance.now();

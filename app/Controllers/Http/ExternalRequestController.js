@@ -6,12 +6,14 @@ const Hourly_Task = use("App/Helpers/Hourly_Task");
 const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const fs = require('fs');
+const Env = use('Env');
+const $HOME = Env.get('home')
 
 class ExternalRequestController {
     
     async Testing({ request, response}){
         let {path} = request.all();
-        let a = fs.existsSync(path)
+        let a = fs.existsSync($HOME + path)
         return response.json(a)
     }
 
@@ -19,7 +21,7 @@ class ExternalRequestController {
         let {page_no,page_size} = request.all();
         let page = !page_no ? 1 : Number(page_no)
         let paging = !page_size ? 10 : Number(page_size)
-        let pbb = fs.readFileSync('public/files/PBB199.json');
+        let pbb = fs.readFileSync($HOME+'public/files/PBB199.json');
         pbb = JSON.parse(pbb);
         var data = pbb
         function paginate(array, page_size, page_number) {

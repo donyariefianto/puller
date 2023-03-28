@@ -24,6 +24,17 @@ class MongoDb {
         return aggCursor
     }
 
+    async findExternalData (data) {
+        const collections = db.collection('externaldatas');
+        const res = await collections.find(data).toArray();
+        return res
+    }
+
+    async UpdateOneExternalData (match, data) {
+        const collections = db.collection('externaldatas');
+        return collections.updateOne(match,data);
+    }
+
     async DeleteByToken (token,id) {
         const collections = db.collection('externaldatas');
         return await collections.deleteMany({externalDataToken:token,userId:Number(id)});

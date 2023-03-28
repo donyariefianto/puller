@@ -4,7 +4,7 @@ const Database = use("Database");
 const axios = use('axios');
 const fs = require('fs');
 const moment = require('moment');
-
+const $HOME = Env.get('home')
 class Maritim {
 
     async area_maritim (){
@@ -35,7 +35,7 @@ class Maritim {
 
     async viewboard_maritim () {
         const dir = 'public/files/maritim/'
-        const files = fs.readdirSync(dir);
+        const files = fs.readdirSync($HOME+dir);
         var cuaca_detail = [{name:'unknown',en:'question'},{name:'Cerah',en:'sun'},{name:'Cerah Berawan',en:'sun-cloud'},{name:'Berawan',en:'cloud'},{name:'Berawan Tebal',en:'clouds'},{name:'Udara Kabur',en:'smog'},{name:'Asap',en:'smoke'},{name:'Kabut',en:'fog'},{name:'Hujan Ringan',en:'cloud-drizzle'},{name:'Hujan Sedang',en:'cloud-showers'},{name:'Hujan Lebat',en:'cloud-hail-mixed'},{name:'Hujan Lokal',en:'cloud-sleet'},{name:'Hujan Petir',en:'thunderstorm'}]
 
         var prop = []

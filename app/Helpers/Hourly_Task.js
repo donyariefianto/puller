@@ -3,11 +3,13 @@ const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const Processing = use("App/Helpers/Processing");
 const fs = require('fs');
+const Env = use('Env');
+const $HOME = Env.get('home')
 class Hourly_Task {
 
     async Generate_Anpr () {
         const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
-        let id_cam = fs.readFileSync('public/files/data_user/id_cam.json',{encoding:'utf8'});
+        let id_cam = fs.readFileSync($HOME+'public/files/data_user/id_cam.json',{encoding:'utf8'});
         id_cam = JSON.parse(id_cam).data
         try {
           for (const i of id_cam) {
