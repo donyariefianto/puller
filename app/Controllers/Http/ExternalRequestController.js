@@ -7,7 +7,7 @@ const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const fs = require('fs');
 const Env = use('Env');
-const $HOME = Env.get('home')
+const $HOME = Env.get('PATH_DIR')
 
 class ExternalRequestController {
     

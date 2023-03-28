@@ -6,7 +6,7 @@ const Processing = use("App/Helpers/Processing")
 const MongoDb = use("App/Models/MongoDb")
 const moment = require('moment');
 const Env = use('Env');
-const $HOME = Env.get('home')
+const $HOME = Env.get('PATH_DIR')
 
 class Daily_Task {
 

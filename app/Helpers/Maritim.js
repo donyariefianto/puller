@@ -4,7 +4,7 @@ const Database = use("Database");
 const axios = use('axios');
 const fs = require('fs');
 const moment = require('moment');
-const $HOME = Env.get('home')
+const $HOME = Env.get('PATH_DIR')
 class Maritim {
 
     async area_maritim (){

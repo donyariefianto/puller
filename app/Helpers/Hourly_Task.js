@@ -4,7 +4,7 @@ const moment = require('moment');
 const Processing = use("App/Helpers/Processing");
 const fs = require('fs');
 const Env = use('Env');
-const $HOME = Env.get('home')
+const $HOME = Env.get('PATH_DIR')
 class Hourly_Task {
 
     async Generate_Anpr () {
