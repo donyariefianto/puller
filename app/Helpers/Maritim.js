@@ -156,7 +156,7 @@ class Maritim {
 
     async meta_maritim () {
         const dir = 'public/files/maritim/'
-        const files = fs.readdirSync($HOME+dir);
+        const files = fs.readdirSync(dir);
         var prop = []
         for (const i of files) {
             let temp = fs.readFileSync(dir+i)
