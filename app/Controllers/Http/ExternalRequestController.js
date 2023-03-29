@@ -64,7 +64,7 @@ class ExternalRequestController {
     }
 
     async GetMaritimMeta({request,response}) {
-        const result = await Daily.Maritim_Viewboard();
+        const result = await Daily.Maritim_Meta();
         return response.json(result);
     }
 
