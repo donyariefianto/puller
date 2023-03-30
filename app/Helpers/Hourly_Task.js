@@ -62,6 +62,7 @@ class Hourly_Task {
             }
             await MOngodb.DeleteByQuery({externalDataToken:i.token,"detail.Custom_Unique_ID":cam.id_cam_point})
             await MOngodb.MultipleInsert(res);
+            var t1 = performance.now();
             await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.id_cam} User ${i.user_id} successfully`,"60MINS","Scheduler60",t1,t0);
           }
         }
