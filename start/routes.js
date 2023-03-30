@@ -22,6 +22,13 @@ Route.group(() => {
     Route.get('/maritim-area','ExternalRequestController.GetMaritimArea')
     Route.get('/generate-anpr','ExternalRequestController.GetAnpr')
     Route.delete('/delete-dataset','ExternalRequestController.RemoveAllDataset')
+
+    // MEDIA TOOL
+    Route.get('/media-keyword','DetermController.ListKeyword')
+    Route.get('/media-list','DetermController.MediaTool')
+    Route.get('/media-feed','DetermController.MediaTool')
+    Route.get('/media-reaction','DetermController.ReactionMediatoolkit')
+    
 }).prefix('service/v1')
 
 Route.get('/pbb_gresik','ExternalRequestController.pbb')
