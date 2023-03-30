@@ -13,7 +13,7 @@ class ExternalRequestController {
     
     async Testing({ request, response}){
         let {path} = request.all();
-        let a = fs.existsSync($HOME + path)
+        let a = await Anpr.List_Camera()
         return response.json(a)
     }
 

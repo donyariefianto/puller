@@ -134,8 +134,8 @@ class Processing {
             Epoch:moment().unix(),
             Custom_Unique_ID:CID,
             Type:TYPE,
-            Data_Date:moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-            Time:moment().format('HH:mm:ss.SSS'),
+            Data_Date:moment().utcOffset('+0700').format('YYYY-MM-DD'),
+            Time:moment().utcOffset('+0700').format('HH:mm:ss'),
             Detail:detail,
             Executed_Time:(t1 - t0)/1000 + " seconds."
         }
