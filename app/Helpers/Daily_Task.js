@@ -92,7 +92,7 @@ class Daily_Task {
                 }
             }
         } catch (error) {
-        return await Processing.Create_Logs(`Insert Daily Record Meta Maritim User failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+        return await Processing.Create_Logs(`Insert Daily Record Meta Maritim failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
         }
     }
 

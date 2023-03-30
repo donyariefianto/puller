@@ -12,8 +12,7 @@ const $HOME = Env.get('PATH_DIR')
 class ExternalRequestController {
     
     async Testing({ request, response}){
-        let {path} = request.all();
-        let a = await Anpr.List_Camera()
+        let a = await Maritim.meta_maritim()
         return response.json(a)
     }
 
@@ -63,13 +62,13 @@ class ExternalRequestController {
         return response.json(a)
     }
 
-    async GetMaritimMeta({request,response}) {
+    async GetMaritimMeta({response}) {
         const result = await Daily.Maritim_Meta();
         return response.json(result);
     }
 
-    async GetMaritimViewboard({request,response}){
-        const result = await Maritim.viewboard_maritim();
+    async GetMaritimViewboard({response}){
+        const result = await Daily.Maritim_Viewboard();
         return response.json(result);
     }
 
