@@ -1,6 +1,7 @@
 'use strict'
 const Maritim = use("App/Helpers/Maritim");
 const Daily = use("App/Helpers/Daily_Task");
+const Hourly = use("App/Helpers/Hourly_Task");
 const MongoDb = use("App/Models/MongoDb");
 const ShellScript = use("App/Helpers/ShellScript");
 const Anpr = use("App/Helpers/Anpr");
@@ -12,7 +13,9 @@ const $HOME = Env.get('PATH_DIR')
 class ExternalRequestController {
     
     async Testing({ request, response}){
-        let a = await Maritim.meta_maritim()
+        let {name,id_cam,id_cam_point} = request.all()
+        const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
+        let a = await Hourly.Generate_Anpr_Datasets()
         return response.json(a)
     }
 

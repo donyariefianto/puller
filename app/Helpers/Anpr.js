@@ -380,6 +380,186 @@ class Anpr {
         return json
     }
 
+    async Generate_Anpr_Dataset (id_cam,id_cam_point,name,now) {
+        let today = moment(now).utcOffset('+0700').format("YYYY-MM-DDT00:00:00Z")
+        let month = moment(now).utcOffset('+0700').format("YYYY-MM-01T00:00:00Z")
+        let StartWeek = moment(today).utcOffset('+0700').startOf('week').format("YYYY-MM-DDT00:00:00Z")
+        let EndWeek = moment(today).utcOffset('+0700').endOf('week').format("YYYY-MM-DDT00:00:00Z")
+        let twenty4h_k = [],twenty4h_u = [],time_24=[]
+        for (let i = 0; i < 24; i++) {
+            let temp = await this.Anpr_LastHourV2(id_cam,Processing.AddTime(today,i,'hour'),Processing.AddTime(today,(i+1),'hour'));
+            time_24.push(moment(Processing.AddTime(today,(i),'hour')).utcOffset('+0700').calendar())
+            twenty4h_k.push(temp.hasil_know)
+            twenty4h_u.push(temp.hasil)
+        }
+        // twenty4h_k = twenty4h_k.reverse();
+        // twenty4h_u = twenty4h_u.reverse();
+        let one_hour = await this.Anpr_LastHour(id_cam,1,0,'hours',now);
+        let two_hour = await this.Anpr_LastHour(id_cam,2,1,'hours',now);
+        let three_hour = await this.Anpr_LastHour(id_cam,3,2,'hours',now);
+
+        let H = await this.Anpr_LastHourV2(id_cam,today,now);
+        let H_1 = await this.Anpr_LastHour(id_cam,2,1,'days',today);
+        let H_2 = await this.Anpr_LastHour(id_cam,3,2,'days',today);
+
+        let W = await this.Anpr_LastHourV2(id_cam,StartWeek,EndWeek);
+        let W_1 = await this.Anpr_LastHourV2(id_cam,Processing.SubtractTime(StartWeek,1,'week'),Processing.SubtractTime(EndWeek,1,'week'));
+        let W_2 = await this.Anpr_LastHourV2(id_cam,Processing.SubtractTime(StartWeek,2,'week'),Processing.SubtractTime(EndWeek,2,'week'));
+
+        let M = await this.Anpr_LastHourV2(id_cam,month,now);
+        let M_1 = await this.Anpr_LastHour(id_cam,2,1,'months',month);
+        let M_2 = await this.Anpr_LastHour(id_cam,3,2,'months',month);
+
+        return {
+            Custom_Unique_ID:id_cam_point,
+            Data_Date:moment(now).utcOffset('+0700').format("YYYY-MM-DD"),
+            Variant:'page_1',
+            Url:`https://103.135.14.146/enygma/cam${id_cam_point}.stream/playlist.m3u8`,
+            Name:name,
+            Kendaraan_Melintas:H.hasil,
+            Kendaraan_Melintas_Terdeteksi:H.hasil_know,
+            Jam_ini:one_hour.hasil,
+            Hari_ini:H.hasil,
+            Minggu_ini:W.hasil,
+            Bulan_ini:M.hasil,
+            J_2:three_hour.hasil_know,
+            J_1:two_hour.hasil_know,
+            J:one_hour.hasil_know,
+            H_2:H_2.hasil_know,
+            H_1:H_1.hasil_know,
+            H:H.hasil_know,
+            M_2:W_2.hasil_know,
+            M_1:W_1.hasil_know,
+            M:W.hasil_know,
+            B_2:M_2.hasil_know,
+            B_1:M_1.hasil_know,
+            B:M.hasil_know,
+            AM12:twenty4h_u[0],
+            AM1:twenty4h_u[1],
+            AM2:twenty4h_u[2],
+            AM3:twenty4h_u[3],
+            AM4:twenty4h_u[4],
+            AM5:twenty4h_u[5],
+            AM6:twenty4h_u[6],
+            AM7:twenty4h_u[7],
+            AM8:twenty4h_u[8],
+            AM9:twenty4h_u[9],
+            AM10:twenty4h_u[10],
+            AM11:twenty4h_u[11],
+            PM12:twenty4h_u[12],
+            PM1:twenty4h_u[13],
+            PM2:twenty4h_u[14],
+            PM3:twenty4h_u[15],
+            PM4:twenty4h_u[16],
+            PM5:twenty4h_u[17],
+            PM6:twenty4h_u[18],
+            PM7:twenty4h_u[19],
+            PM8:twenty4h_u[20],
+            PM9:twenty4h_u[21],
+            PM10:twenty4h_u[22],
+            PM11:twenty4h_u[23]
+        }
+        var page_1 = {
+            Custom_Unique_ID:id_cam_point,
+            Data_Date:moment(now).utcOffset('+0700').format("YYYY-MM-DD"),
+            Variant:'page_1',
+            Url:`https://103.135.14.146/enygma/cam${id_cam_point}.stream/playlist.m3u8`,
+            Name:name,
+            Kendaraan_Melintas:H.hasil,
+            Kendaraan_Melintas_Terdeteksi:H.hasil_know,
+            Jam_ini:one_hour.hasil,
+            Hari_ini:H.hasil,
+            Minggu_ini:W.hasil,
+            Bulan_ini:M.hasil,
+            J_2:three_hour.hasil_know,
+            J_1:two_hour.hasil_know,
+            J:one_hour.hasil_know,
+            H_2:H_2.hasil_know,
+            H_1:H_1.hasil_know,
+            H:H.hasil_know,
+            M_2:W_2.hasil_know,
+            M_1:W_1.hasil_know,
+            M:W.hasil_know,
+            B_2:M_2.hasil_know,
+            B_1:M_1.hasil_know,
+            B:M.hasil_know,
+            AM12:'-',
+            AM1:'-',
+            AM2:'-',
+            AM3:'-',
+            AM4:'-',
+            AM5:'-',
+            AM6:'-',
+            AM7:'-',
+            AM8:'-',
+            AM9:'-',
+            AM10:'-',
+            AM11:'-',
+            PM12:'-',
+            PM1:'-',
+            PM2:'-',
+            PM3:'-',
+            PM4:'-',
+            PM5:'-',
+            PM6:'-',
+            PM7:'-',
+            PM8:'-',
+            PM9:'-',
+            PM10:'-',
+            PM11:'-'
+        }
+        var page_2 = {
+            Custom_Unique_ID:id_cam_point,
+            Data_Date:moment(now).utcOffset('+0700').format("YYYY-MM-DD"),
+            Variant:'page_2',
+            Url:'-',
+            Name:'-',
+            Kendaraan_Melintas:'-',
+            Kendaraan_Melintas_Terdeteksi:'-',
+            Jam_ini:'-',
+            Hari_ini:'-',
+            Minggu_ini:'-',
+            Bulan_ini:'-',
+            J_2:'-',
+            J_1:'-',
+            J:'-',
+            H_2:'-',
+            H_1:'-',
+            H:'-',
+            M_2:'-',
+            M_1:'-',
+            M:'-',
+            B_2:'-',
+            B_1:'-',
+            B:'-',
+            AM12:twenty4h_u[0],
+            AM1:twenty4h_u[1],
+            AM2:twenty4h_u[2],
+            AM3:twenty4h_u[3],
+            AM4:twenty4h_u[4],
+            AM5:twenty4h_u[5],
+            AM6:twenty4h_u[6],
+            AM7:twenty4h_u[7],
+            AM8:twenty4h_u[8],
+            AM9:twenty4h_u[9],
+            AM10:twenty4h_u[10],
+            AM11:twenty4h_u[11],
+            PM12:twenty4h_u[12],
+            PM1:twenty4h_u[13],
+            PM2:twenty4h_u[14],
+            PM3:twenty4h_u[15],
+            PM4:twenty4h_u[16],
+            PM5:twenty4h_u[17],
+            PM6:twenty4h_u[18],
+            PM7:twenty4h_u[19],
+            PM8:twenty4h_u[20],
+            PM9:twenty4h_u[21],
+            PM10:twenty4h_u[22],
+            PM11:twenty4h_u[23]
+        }
+        return [page_1,page_2]
+    }
+
     async Vehicle_Record (cam) {
         try {
             let str = moment().utcOffset('+0700').subtract(5,'minutes').format()

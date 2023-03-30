@@ -1,0 +1,11 @@
+[{
+    "token":"enygma_kusqrzkof",
+    "user_id":23,
+    "externalDataId":750,
+    "data":[
+      {"name":"Perempatan Gadang","id_cam":"13","id_cam_point":"104"},
+      {"name":"Pertigaan Kacuk","id_cam":"5","id_cam_point":"103"},
+      {"name":"Perbatasan Batu-Malang","id_cam":"9","id_cam_point":"105"},
+      {"name":"Jembatan Kali Sari","id_cam":"1","id_cam_point":"101"}
+    ]
+}]
