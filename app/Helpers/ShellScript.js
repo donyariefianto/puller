@@ -4,6 +4,7 @@ const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
 const moment = require('moment');
 const MongoDb = use("App/Models/MongoDb");
+const axios = use('axios');
 
 class ShellScript {
 
@@ -48,6 +49,68 @@ class ShellScript {
         await MongoDb.DeleteByToken('enygma_fzthgto',76)
         await MongoDb.MultipleInsert(vl)
         return 'Successfully'
+    }
+
+    async GetKaiRoute () {
+        // x,y to lon,lat
+        var meters2degress = function(x,y) {
+            var lon = x *  180 / 20037508.34 ;
+            //thanks magichim @ github for the correction
+            var lat = Math.atan(Math.exp(y * Math.PI / 20037508.34)) * 360 / Math.PI - 90; 
+            return [lon, lat]
+        }
+        // lon,lat to x,y
+        var degrees2meters = function(lon,lat) {
+            var x = lon * 20037508.34 / 180;
+            var y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / (Math.PI / 180);
+            y = y * 20037508.34 / 180;
+            return [x, y]
+        }
+
+        var config = {
+            method: 'get',
+            url: 'https://www.arcgis.com/sharing/rest/content/items/d21eded5705f4a759e2a64a96594c68b/data?f=json',
+            headers: { }
+        };
+      
+      const a = await axios(config);
+      var has = []
+        for (const i of a.data.operationalLayers) {
+        has.push(i.featureCollection.layers[0].featureSet.features)
+        }
+      var it1=[],it2=[],it3=[]
+        for (const i of has[0]) {
+            for (const i2 of i.geometry.paths) {
+                for (const i3 of i2) {
+                    it3.push(meters2degress(i3[0],i3[1]));
+                }
+                it2.push(it3);
+                it3=[]
+            }
+            i.attributes.id = i.attributes.FID
+            it1.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "MultiLineString",
+                    "coordinates": it2
+                },
+                "properties": i.attributes
+            });
+            it2=[]
+        }
+      var point_station = []
+      for (const i of has[1]) {
+        let temp = meters2degress(i.geometry.x,i.geometry.y)
+        i.attributes.Location = `${temp[1]},${temp[0]}`
+        point_station.push(i.attributes)
+      }
+      const result = {
+        "type": "FeatureCollection",
+        "subject": "Jaringan Rel KAI",
+        "features": it1
+      }
+      return result
+      return point_station
     }
 
 }

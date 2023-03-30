@@ -2,7 +2,7 @@
 const Maritim = use("App/Helpers/Maritim");
 const Daily = use("App/Helpers/Daily_Task");
 const MongoDb = use("App/Models/MongoDb");
-const Hourly_Task = use("App/Helpers/Hourly_Task");
+const ShellScript = use("App/Helpers/ShellScript");
 const Anpr = use("App/Helpers/Anpr");
 const moment = require('moment');
 const fs = require('fs');
@@ -41,6 +41,11 @@ class ExternalRequestController {
                         return x
                     })
         });
+    }
+
+    async KaiRoute ({response}) {
+        let res = await ShellScript.GetKaiRoute();
+        return response.json(res)
     }
 
     async RemoveAllDataset ({request, response}) {

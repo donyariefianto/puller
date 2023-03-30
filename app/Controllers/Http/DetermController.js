@@ -75,7 +75,6 @@ class DetermController {
             const d = await axios(config);
             return response.status(200).json({status:200,message:'success',data:d.data.data.response});
         } catch (e) {
-          console.log(e);
             return response.status(400).json({status:400,message:e.message });
         }
     }

@@ -12,6 +12,7 @@ class Daily extends Task {
     await Daily_Task.Maritim_Meta();
     await Daily_Task.Maritim_Viewboard();
     await Daily_Task.GenerateStatsDatasets();
+    await Daily_Task.GenerateMonipad();
   }
 
 }
