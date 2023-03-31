@@ -95,9 +95,9 @@ class DetermController {
             };
     
             const datas = await axios(addsentiment);
-            return res.status(200).json({status:200,message:'success',data:datas.data});
+            return response.status(200).json({status:200,message:'success',data:datas.data});
         } catch (e) {
-            return res.status(400).json({status:400,message:e.message });
+            return response.status(400).json({status:400,message:e.message });
         }
     }
 }
