@@ -34,12 +34,12 @@ class Maritim {
     }
 
     async viewboard_maritim () {
-        const dir = 'public/files/maritim/'
-        const files = fs.readdirSync($HOME+dir);
-        var cuaca_detail = [{name:'unknown',en:'question'},{name:'Cerah',en:'sun'},{name:'Cerah Berawan',en:'sun-cloud'},{name:'Berawan',en:'cloud'},{name:'Berawan Tebal',en:'clouds'},{name:'Udara Kabur',en:'smog'},{name:'Asap',en:'smoke'},{name:'Kabut',en:'fog'},{name:'Hujan Ringan',en:'cloud-drizzle'},{name:'Hujan Sedang',en:'cloud-showers'},{name:'Hujan Lebat',en:'cloud-hail-mixed'},{name:'Hujan Lokal',en:'cloud-sleet'},{name:'Hujan Petir',en:'thunderstorm'}]
-
-        var prop = []
         try {
+            const dir = 'public/files/maritim/'
+            const files = fs.readdirSync($HOME+dir);
+            var cuaca_detail = [{name:'No Significant Weather',en:'question'},{name:'unknown',en:'question'},{name:'Cerah',en:'sun'},{name:'Cerah Berawan',en:'sun-cloud'},{name:'Berawan',en:'cloud'},{name:'Berawan Tebal',en:'clouds'},{name:'Udara Kabur',en:'smog'},{name:'Asap',en:'smoke'},{name:'Kabut',en:'fog'},{name:'Hujan Ringan',en:'cloud-drizzle'},{name:'Hujan Sedang',en:'cloud-showers'},{name:'Hujan Lebat',en:'cloud-hail-mixed'},{name:'Hujan Lokal',en:'cloud-sleet'},{name:'Hujan Petir',en:'thunderstorm'}]
+            
+            var prop = []
             for (const i of files) {
                 let temp = fs.readFileSync(dir+i)
                 temp = JSON.parse(temp).features
@@ -62,7 +62,7 @@ class Maritim {
                             Keterangan_Gelombang:`${detail_data.gelombang.name?detail_data.gelombang.name:''} / ${detail_data.gelombang.name_eng?detail_data.gelombang.name_eng:''}`,
                             Angin:`from ${detail_data.angin.from.name?detail_data.angin.from.name:''} to ${detail_data.angin.to.name?detail_data.angin.to.name:''}`,
                             Cuaca:detail_data.cuaca.name?detail_data.cuaca.name:0,
-                            Gambar_Cuaca:ico_weather.en,
+                            Gambar_Cuaca:ico_weather.en?ico_weather.en:'ico_weather.en',
                             Gambar_Gelombang:'',
                             Nomor_Surat:detail_data.nomor_surat?detail_data.nomor_surat:0,
                             Color_Gambar_Cuaca:'',
@@ -85,7 +85,7 @@ class Maritim {
                             Keterangan_Gelombang:`${detail_data2.gelombang.name?detail_data2.gelombang.name:''} / ${detail_data2.gelombang.name_eng?detail_data2.gelombang.name_eng:''}`,
                             Angin:`from ${detail_data2.angin.from.name?detail_data2.angin.from.name:''} to ${detail_data2.angin.to.name?detail_data2.angin.to.name:''}`,
                             Cuaca:detail_data2.cuaca.name?detail_data2.cuaca.name:0,
-                            Gambar_Cuaca:ico_weather2.en,
+                            Gambar_Cuaca:ico_weather2.en?ico_weather2.en:'question',
                             Gambar_Gelombang:'',
                             Nomor_Surat:detail_data2.nomor_surat?detail_data2.nomor_surat:0,
                             Color_Gambar_Cuaca:'',
@@ -108,7 +108,7 @@ class Maritim {
                             Keterangan_Gelombang:`${detail_data3.gelombang.name?detail_data3.gelombang.name:''} / ${detail_data3.gelombang.name_eng?detail_data3.gelombang.name_eng:''}`,
                             Angin:`from ${detail_data3.angin.from.name?detail_data3.angin.from.name:''} to ${detail_data3.angin.to.name?detail_data3.angin.to.name:''}`,
                             Cuaca:detail_data3.cuaca.name?detail_data3.cuaca.name:0,
-                            Gambar_Cuaca:ico_weather3.en,
+                            Gambar_Cuaca:ico_weather3.en?ico_weather3.en:'question',
                             Gambar_Gelombang:'',
                             Nomor_Surat:detail_data3.nomor_surat?detail_data3.nomor_surat:0,
                             Color_Gambar_Cuaca:'',
@@ -131,7 +131,7 @@ class Maritim {
                             Keterangan_Gelombang:`${detail_data4.gelombang.name?detail_data4.gelombang.name:''} / ${detail_data4.gelombang.name_eng?detail_data4.gelombang.name_eng:''}`,
                             Angin:`from ${detail_data4.angin.from.name?detail_data4.angin.from.name:''} to ${detail_data4.angin.to.name?detail_data4.angin.to.name:''}`,
                             Cuaca:detail_data4.cuaca.name?detail_data4.cuaca.name:0,
-                            Gambar_Cuaca:ico_weather4.en,
+                            Gambar_Cuaca:ico_weather4.en?ico_weather4.en:'question',
                             Gambar_Gelombang:'',
                             Nomor_Surat:detail_data4.nomor_surat?detail_data4.nomor_surat:0,
                             Color_Gambar_Cuaca:'',

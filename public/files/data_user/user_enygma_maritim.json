@@ -1,1 +1,34 @@
-{"data":[{"user":10,"meta":"enygma_aqrtwtk","viewboard":"enygma_xhfmzmxfc"}]}
+{
+    "data": [
+        {
+            "user": 10,
+            "meta": "enygma_aqrtwtk",
+            "viewboard": "enygma_xhfmzmxfc",
+            "area": "enygma_puorzjk"
+        },
+        {
+            "user": 76,
+            "meta": "enygma_mavycibzh",
+            "viewboard": "enygma_woksklxc",
+            "area": "enygma_coslya"
+        },
+        {
+            "user": 23,
+            "meta": "enygma_tzzyjvk",
+            "viewboard": "enygma_lpyzbvrj",
+            "area": "enygma_ihhlv"
+        },
+        {
+            "user": 87,
+            "meta": "enygma_mtnkxvwp",
+            "viewboard": "enygma_shfcjvqjg",
+            "area": "enygma_mlwual"
+        },
+        {
+            "user": 93,
+            "meta": "enygma_wltl",
+            "viewboard": "enygma_loiauxin",
+            "area": "enygma_waadgyqen"
+        }
+    ]
+}

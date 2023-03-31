@@ -49,7 +49,7 @@ class Hourly_Task {
             // GENERATE WITH DATASETS
             var t0 = performance.now();
             var temp = await Anpr.Generate_Anpr_Dataset(cam.id_cam,cam.id_cam_point,cam.name,now);
-            for (const l of temp) {
+            for (const l of [temp]) {
               res.push({
                 "userId":Number(i.user_id),
                 "externalDataId":Number(i.externalDataId),

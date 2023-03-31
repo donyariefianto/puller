@@ -109,16 +109,17 @@ class Daily_Task {
                 if (viewboard_maritim.length>0) {
                     const insrt_viewboard = await Processing.InsertByToken(viewboard_maritim,req_viewboard,'append')
                     if (insrt_viewboard.insertedCount > 0) {
-                    await Processing.Create_Logs(`Insert Hourly Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"60MINS","Scheduler60",t1,t0);
+                        res.push(insrt_viewboard.insertedCount)
+                    await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"60MINS","Scheduler60",t1,t0);
                     }else{
-                    await Processing.Create_Logs(`Insert Hourly Record Viewboard Maritim User ${i.user} failed`,"60MINS","Scheduler60",t1,t0);
+                        res.push('0 '+ i.viewboard,i.user)
+                    await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} failed`,"60MINS","Scheduler60",t1,t0);
                     }
                 }
-                res.push(del_viewboard,req_viewboard)
             }
             return res
         } catch (error) {
-        return await Processing.Create_Logs(`Insert Hourly Record Viewboard Maritim failed ${error.message}`,"60MINS","Scheduler60",0,0);
+            return await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim failed ${error.message}`,"60MINS","Scheduler60",0,0);
         }
     }
 
