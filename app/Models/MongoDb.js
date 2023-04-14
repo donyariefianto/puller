@@ -5,6 +5,7 @@ const url = Env.get('URL_MONGO')
 const db_ =Env.get('DB_MONGO')
 const client = new MongoClient(url);
 const db = client.db(db_);
+const ObjectID = require('mongodb').ObjectID
 
 class MongoDb {
     async Count_Data_Artemis (data) {
@@ -52,11 +53,13 @@ class MongoDb {
 
     async MultipleInsert (data) {
         const collections = db.collection('externaldatas');
+        data._id = new ObjectID();
         return await collections.insertMany(data);
     }
     
     async MultipleInsertAnpr (data) {
         const collections = db.collection('artmsanpr');
+        data._id = new ObjectID();
         return await collections.insertMany(data);
     }
 

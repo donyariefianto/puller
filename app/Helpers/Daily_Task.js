@@ -3,10 +3,12 @@ const fs = require('fs');
 const Maritim = use("App/Helpers/Maritim")
 const ShellScript = use("App/Helpers/ShellScript")
 const Processing = use("App/Helpers/Processing")
+const siskaperbapo = use("App/Helpers/Siskaperbapo")
 const MongoDb = use("App/Models/MongoDb")
 const moment = require('moment');
 const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
+const Database = use("Database");
 
 class Daily_Task {
 
@@ -34,10 +36,6 @@ class Daily_Task {
             });
             
         }
-        
-
-
-
         return 0
     }
 
@@ -123,6 +121,64 @@ class Daily_Task {
         }
     }
 
+    async Siskaperbapo () {
+        try {
+            const komoditas = await MongoDb.findExternalData({
+                userId:76,
+                externalDataToken:'enygma_yrjrktfrh',
+                deleted_at:null
+            });
+            for (const i of komoditas) {
+                let data = await siskaperbapo.GenerateSiskaperbapo(i.detail.Custom_Unique_ID);
+                  if (data.subject) {
+                    await Processing.UpdateS3File(i.detail.Geojson_File,data);
+                  }
+              }
+            return console.log('success siskaperbapo');
+        } catch (e) {
+            return console.log(e.message);
+        }
+    }
+
+    async SiskaperbapoByMetadata () {
+        try {
+            const komoditas = await MongoDb.findExternalData({
+                userId:76,
+                externalDataToken:'enygma_irxflin',
+                deleted_at:null
+            });
+            var vlnm = []
+            for (var i = 0; i < 5; i++) {
+                vlnm.push(moment().subtract(i, 'days').format('YYYY-MM-DD'))
+            }
+            
+            await Database
+            .table('external_data_layers')
+            .where('token', 'enygma_irxflin')
+            .update({ value_name: (vlnm.reverse()).toString()})
+            await MongoDb.DeleteByToken('enygma_eyycuplokd',76)
+            for (const i of komoditas) {
+                var t0 = performance.now();
+                let data = await siskaperbapo.GenerateSiskaperbapoByMeta(i.detail.Custom_Unique_ID);
+                if (data.length>0) {
+                    const insrt_meta = await Processing.InsertByToken(data,{
+                        user_id:76,
+                        id:1386,
+                        token:'enygma_eyycuplokd',
+                    },'append')
+                var t1 = performance.now();
+                if (insrt_meta.insertedCount > 0) {
+                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
+                }else{
+                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} failed`,"14400MINS","Scheduler1440",t1,t0);
+                } 
+                }
+            }
+            return console.log('success siskaperbapo');
+        } catch (e) {
+            return console.log(e.message);
+        }
+    }
 }
 
 module.exports = new Daily_Task()

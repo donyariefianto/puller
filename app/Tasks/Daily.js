@@ -9,6 +9,7 @@ class Daily extends Task {
   }
 
   async handle () {
+    await Daily_Task.SiskaperbapoByMetadata();
     await Daily_Task.Maritim_Meta();
     await Daily_Task.Maritim_Viewboard();
     await Daily_Task.GenerateStatsDatasets();

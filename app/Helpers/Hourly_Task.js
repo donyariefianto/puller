@@ -56,17 +56,16 @@ class Hourly_Task {
                 "externalDataToken":i.token,
                 "detail":l,
                 created_at : new Date(), 
-                updated_at : new Date(), 
+                updated_at : new Date(),
                 deleted_at : null
               })
             }
-            await MOngodb.DeleteByQuery({externalDataToken:i.token,"detail.Custom_Unique_ID":cam.id_cam_point})
-            await MOngodb.MultipleInsert(res);
             var t1 = performance.now();
             await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.id_cam} User ${i.user_id} successfully`,"60MINS","Scheduler60",t1,t0);
           }
+          await MOngodb.DeleteByToken('enygma_kusqrzkof',23)
+          await MOngodb.MultipleInsert(res);
         }
-        return res
       } catch (error) {
         await Processing.Create_Logs(`Generate 1 Hour Record Vehicle failed ${error.message}`,"60MINS","Scheduler60",0,0);
       }

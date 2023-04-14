@@ -1,10 +1,10 @@
 'use strict'
 const Env = use('Env')
-const Database = use("Database");
 const axios = use('axios');
 const fs = require('fs');
 const moment = require('moment');
 const $HOME = Env.get('PATH_DIR')
+const Processing = use("App/Helpers/Processing")
 class Siskaperbapo {
     async GenerateSiskaperbapo (komoditas) {
         try {
@@ -13,7 +13,7 @@ class Siskaperbapo {
                 return {status:400,message:`Komoditas are allowed ${id_komoditas}`}
             }
             var loopjtm =[{kota:'surabayakota',bps:3578},{kota:'malangkota',bps:3573},{kota:'kedirikota',bps:3571},{kota:'jemberkab',bps:3509},{kota:'bangkalankab',bps:3526},{kota:'banyuwangikab',bps:3510},{kota:'blitarkab',bps:3505},{kota:'bojonegorokab',bps:3522},{kota:'bondowosokab',bps:3511},{kota:'gresikkab',bps:3525},{kota:'jombangkab',bps:3517},{kota:'kedirikab',bps:3506},{kota:'lamongankab',bps:3524},{kota:'lumajangkab',bps:3508},{kota:'madiunkab',bps:3519},{kota:'magetankab',bps:3520},{kota:'malangkab',bps:3507},{kota:'mojokertokab',bps:3516},{kota:'nganjukkab',bps:3518},{kota:'ngawikab',bps:3521},{kota:'pacitankab',bps:3501},{kota:'pamekasankab',bps:3528},{kota:'pasuruankab',bps:3514},{kota:'ponorogokab',bps:3502},{kota:'probolinggokab',bps:3513},{kota:'sampangkab',bps:3527},{kota:'sidoarjokab',bps:3515},{kota:'situbondokab',bps:3512},{kota:'sumenepkab',bps:3529},{kota:'trenggalekkab',bps:3503},{kota:'tubankab',bps:3523},{kota:'tulungagungkab',bps:3504},{kota:'batukota',bps:3579},{kota:'blitarkota',bps:3572},{kota:'madiunkota',bps:3577},{kota:'mojokertokota',bps:3576},{kota:'pasuruankota',bps:3575},{kota:'probolinggokota',bps:3574}]
-            var exist = await getAllCities('JAWA TIMUR');
+            var exist = await Processing.getAllCities('JAWA TIMUR');
             var hasil = []
             let day5 = []
             let vlnm = []
@@ -94,7 +94,94 @@ class Siskaperbapo {
         } catch (e) {
             return {status:400,message:e.message }
         }
-    } 
+    }
+    
+    async GenerateSiskaperbapoByMeta (komoditas) {
+        try {
+            var id_komoditas = ["39","49","2","4","3","73","74","71","72","48","38","37","50","13","14","12","27","28","82","7","40","58","62","59","60","61","35","25","41","32","33","42","67","45","43","44","9","92","51","10","95","96","97","81","76","77","78","79","80","68","84","85","86","87","88","91","93","54","89","55","90","23","24","20","21","17","16","30","46","69","47"]
+            if (!id_komoditas.includes(komoditas)) {
+                return {status:400,message:`Komoditas are allowed ${id_komoditas}`}
+            }
+            async function getDataSiska(vl){
+                let result = await axios({
+                    method: 'get',
+                    url: `https://siskaperbapo.jatimprov.go.id/home2/getDataMap/?tanggal=${moment().subtract(vl, 'days').format('YYYY-MM-DD')}&komoditas=${komoditas}`,
+                    headers: { 
+                        'Cookie': 'PHPSESSID=0f0hig2j0sahe9eh6fiev6f89p'
+                    }
+                });
+                result = result.data
+                return result;
+            }
+    
+            async function getcolor(trsh10,data){
+                let warna
+                if(data == 0 ){
+                    return warna = 'grey'
+                }else if(data <= trsh10 + (trsh10 * 10 / 100) && data >= trsh10 - (trsh10 * 10 / 100) ){
+                    return warna = 'green'
+                }else if(data >= trsh10 + (trsh10 * 10 / 100)){
+                    return warna = 'red'
+                }else if(data <= trsh10 - (trsh10 * 10 / 100)){
+                    return warna = 'yellow'
+                }
+            }
+            var loopjtm =[{kota:'surabayakota',bps:3578},{kota:'malangkota',bps:3573},{kota:'kedirikota',bps:3571},{kota:'jemberkab',bps:3509},{kota:'bangkalankab',bps:3526},{kota:'banyuwangikab',bps:3510},{kota:'blitarkab',bps:3505},{kota:'bojonegorokab',bps:3522},{kota:'bondowosokab',bps:3511},{kota:'gresikkab',bps:3525},{kota:'jombangkab',bps:3517},{kota:'kedirikab',bps:3506},{kota:'lamongankab',bps:3524},{kota:'lumajangkab',bps:3508},{kota:'madiunkab',bps:3519},{kota:'magetankab',bps:3520},{kota:'malangkab',bps:3507},{kota:'mojokertokab',bps:3516},{kota:'nganjukkab',bps:3518},{kota:'ngawikab',bps:3521},{kota:'pacitankab',bps:3501},{kota:'pamekasankab',bps:3528},{kota:'pasuruankab',bps:3514},{kota:'ponorogokab',bps:3502},{kota:'probolinggokab',bps:3513},{kota:'sampangkab',bps:3527},{kota:'sidoarjokab',bps:3515},{kota:'situbondokab',bps:3512},{kota:'sumenepkab',bps:3529},{kota:'trenggalekkab',bps:3503},{kota:'tubankab',bps:3523},{kota:'tulungagungkab',bps:3504},{kota:'batukota',bps:3579},{kota:'blitarkota',bps:3572},{kota:'madiunkota',bps:3577},{kota:'mojokertokota',bps:3576},{kota:'pasuruankota',bps:3575},{kota:'probolinggokota',bps:3574}]
+            
+            // var exist = await Processing.getAllCities('JAWA TIMUR');
+            let exist = fs.readFileSync($HOME+'public/files/area/jatim.json',{encoding:'utf8'});
+            exist = JSON.parse(exist).features;
+            var hasil = []
+            let day5 = []
+            for (var i = 0; i < 5; i++) {
+                let temp = await getDataSiska(i)
+                if (typeof temp === 'object') {
+                    day5.push(temp)
+                }
+            }
+            day5 = day5.reverse();
+            if (day5.length>0) {
+                for (const a of loopjtm){
+                    let find = exist.find(o => o.properties.kodebps == a.bps);
+                    hasil.push({
+                        Custom_Unique_ID:find.properties.kemendagri+'-'+komoditas,
+                        Data_Date:moment().format('YYYY-MM-DD'),
+                        Color: await getcolor(day5[0].avg,day5[0].data[a.kota].hrg),
+                        Color2: await getcolor(day5[1].avg,day5[1].data[a.kota].hrg),
+                        Color3: await getcolor(day5[2].avg,day5[2].data[a.kota].hrg),
+                        Color4: await getcolor(day5[3].avg,day5[3].data[a.kota].hrg),
+                        Color5: await getcolor(day5[4].avg,day5[4].data[a.kota].hrg),
+                        Value: day5[0].data[a.kota].hrg,
+                        Value2: day5[1].data[a.kota].hrg,
+                        Value3: day5[2].data[a.kota].hrg,
+                        Value4: day5[3].data[a.kota].hrg,
+                        Value5: day5[4].data[a.kota].hrg,
+                    })
+                }
+            }else{
+                for (const a of loopjtm){
+                    let find = exist.find(o => o.properties.kodebps == a.bps);
+                    hasil.push({
+                        Custom_Unique_ID:find.properties.kemendagri+'-'+komoditas,
+                        Data_Date:moment().format('YYYY-MM-DD'),
+                        Color: '-',
+                        Color2: '-',
+                        Color3: '-',
+                        Color4: '-',
+                        Color5: '-',
+                        Value: 0,
+                        Value2: 0,
+                        Value3: 0,
+                        Value4: 0,
+                        Value5: 0,
+                    })
+                }
+            }
+            return hasil
+        } catch (e) {
+            return {status:400,message:e.message }
+        }
+    }
 }
 
 module.exports = new Siskaperbapo()

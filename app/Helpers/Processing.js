@@ -209,6 +209,25 @@ class Processing {
         let res = await axios(reqOptions);
         return res.data
     }
+
+    async UpdateS3File(file,data) {
+        let headersList = {
+          "Accept": "*/*",
+          "Content-Type": "application/json" 
+        }
+        
+        let bodyContent = JSON.stringify({
+          "data": data
+        });
+        
+        let reqOptions = {
+          url: `https://api.enygma.id/v1/noAuth/updates3file?uploadParams=${file}`,
+          method: "POST",
+          headers: headersList,
+          data: bodyContent,
+        }
+        return await axios(reqOptions)
+      }
 }
 
 module.exports = new Processing()

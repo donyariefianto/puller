@@ -2,6 +2,9 @@
 const Maritim = use("App/Helpers/Maritim");
 const Daily = use("App/Helpers/Daily_Task");
 const Hourly = use("App/Helpers/Hourly_Task");
+const kaltim = use("App/Helpers/Kaltim");
+const Processing = use("App/Helpers/Processing")
+const siskaperbapo = use("App/Helpers/Siskaperbapo");
 const MongoDb = use("App/Models/MongoDb");
 const ShellScript = use("App/Helpers/ShellScript");
 const Anpr = use("App/Helpers/Anpr");
@@ -15,7 +18,29 @@ class ExternalRequestController {
     async Testing({ request, response}){
         let {name,id_cam,id_cam_point} = request.all()
         const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
-        let a = await Hourly.Generate_Anpr_Datasets()
+        let a = await kaltim.Laminetam()
+        return response.json(a)
+    }
+
+    async GenerateCctvKaltim({ request, response}){
+        let {name,id_cam,id_cam_point} = request.all()
+        let a = await kaltim.Generate_link_cctv_kaltim()
+        return response.json(a)
+    }
+
+    async GenerateSiskaperbapo({request, response}){
+        let a = await Daily.SiskaperbapoByMetadata()
+        return response.json(a)
+    }
+
+    async GenerateSiskaperbapoArea({request, response}){
+        let {id} = request.all()
+        let a = await siskaperbapo.GenerateSiskaperbapoByMeta(id)
+        return response.json(a)
+    }
+
+    async AllCity ({request,response}) {
+        var a = await Processing.getAllCities('JAWA TIMUR');
         return response.json(a)
     }
 
