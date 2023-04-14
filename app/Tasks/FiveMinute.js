@@ -2,6 +2,8 @@
 
 const Task = use('Task')
 const FiveMin_Task = use("App/Helpers/FiveMin_Task")
+const Env = use('Env')
+const project = Env.get('SERVICE_PROJECT')
 
 class FiveMinute extends Task {
   static get schedule () {
@@ -9,7 +11,9 @@ class FiveMinute extends Task {
   }
 
   async handle () {
-    await FiveMin_Task.InsertAt5RecordVehicle();
+    if (project==='enygma') {
+      await FiveMin_Task.InsertAt5RecordVehicle();
+    }
   }
 
 }

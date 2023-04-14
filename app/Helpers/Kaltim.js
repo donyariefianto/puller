@@ -30,71 +30,16 @@ class Kaltim {
     }
 
     async Generate_link_cctv_kaltim () {
-        try {
-            const data_cctv_kalimantan = await MongoDb.findExternalData({
-                userId:117,
-                externalDataToken:'enygma_yqufjoj',
-                deleted_at:null
-            });
-            for (const i of data_cctv_kalimantan) {
-                const match = {externalDataToken:i.externalDataToken,deleted_at:null,"detail.Custom_Unique_ID":i.detail.Custom_Unique_ID}
-                var tt = await this.getNewUrl(i.detail.Custom_Unique_ID)
-                await MongoDb.UpdateOneExternalData(match,{$set:{'detail.Url':tt.data[0]?tt.data[0].cameraStream:'', updated_at : new Date()}});
-            }
-        } catch (error) {
-            console.log(error);
+        const data_cctv_kalimantan = await MongoDb.findExternalData({
+            userId:117,
+            externalDataToken:'enygma_yqufjoj',
+            deleted_at:null
+        });
+        for (const i of data_cctv_kalimantan) {
+            const match = {externalDataToken:i.externalDataToken,deleted_at:null,"detail.Custom_Unique_ID":i.detail.Custom_Unique_ID}
+            var tt = await this.getNewUrl(i.detail.Custom_Unique_ID)
+            await MongoDb.UpdateOneExternalData(match,{$set:{'detail.Url':tt.data[0]?tt.data[0].cameraStream:'', updated_at : new Date()}});
         }
-    }
-    
-    SumArray (arr,key) {
-        const sum = arr.reduce((accumulator, object) => {
-            return accumulator + Number(object[key]);
-        }, 0);
-        return sum
-    }
-
-    Median(arr,key) {
-        let h = arr.map(e=>{
-            if (e[key]) {
-                return Number(e[key])
-            }
-        });
-        const middle = (h.length + 1) / 2;
-        // Avoid mutating when sorting
-        const sorted = [...h].sort((a, b) => a - b);
-        const isEven = sorted.length % 2 === 0;
-      
-        return isEven ? (sorted[middle - 1.5]
-            + sorted[middle - 0.5]) / 2 :
-            sorted[middle - 1];
-    }
-    
-    Min (array,key) {
-        let h = array.filter(i=>{
-            if (i[key]) {
-                return i[key]
-            }
-        })
-        h = h.map(e=>{
-            if (e[key]) {
-                return Number(e[key])
-            }
-        });
-        return Math.min(...h);
-    }
-
-    Max (array,key) {
-        let h = array.filter(i=>{
-            if (i[key]) {
-                return i[key]
-            }
-        })
-        h = h.map(e=>{
-            if (e[key]) {
-                return Number(e[key])
-            }
-        });
-        return Math.max(...h);
     }
 
     async Laminetam () {
@@ -177,6 +122,16 @@ class Kaltim {
                 })
             }
         }
+        // hapus 5069d4feefedf3b9c1c5207e639be1be997551d3
+        let delete_data = {
+            method: 'delete',
+            maxBodyLength: Infinity,
+            url: 'https://senada.kaltimprov.go.id/api/v1/noAuth/destroyAll/117',
+            data : {
+                token:'enygma_jdldboflne'
+            }
+        };
+        await axios.request(delete_data)
         let data = JSON.stringify({
             "data": result,
             "token": token_dataset,
@@ -208,6 +163,57 @@ class Kaltim {
         
         let response = await axios.request(reqOptions);
         return response.data
+    }
+
+    SumArray (arr,key) {
+        const sum = arr.reduce((accumulator, object) => {
+            return accumulator + Number(object[key]);
+        }, 0);
+        return sum
+    }
+
+    Median(arr,key) {
+        let h = arr.map(e=>{
+            if (e[key]) {
+                return Number(e[key])
+            }
+        });
+        const middle = (h.length + 1) / 2;
+        // Avoid mutating when sorting
+        const sorted = [...h].sort((a, b) => a - b);
+        const isEven = sorted.length % 2 === 0;
+      
+        return isEven ? (sorted[middle - 1.5]
+            + sorted[middle - 0.5]) / 2 :
+            sorted[middle - 1];
+    }
+    
+    Min (array,key) {
+        let h = array.filter(i=>{
+            if (i[key]) {
+                return i[key]
+            }
+        })
+        h = h.map(e=>{
+            if (e[key]) {
+                return Number(e[key])
+            }
+        });
+        return Math.min(...h);
+    }
+
+    Max (array,key) {
+        let h = array.filter(i=>{
+            if (i[key]) {
+                return i[key]
+            }
+        })
+        h = h.map(e=>{
+            if (e[key]) {
+                return Number(e[key])
+            }
+        });
+        return Math.max(...h);
     }
 }
 

@@ -4,6 +4,7 @@ const Maritim = use("App/Helpers/Maritim")
 const ShellScript = use("App/Helpers/ShellScript")
 const Processing = use("App/Helpers/Processing")
 const siskaperbapo = use("App/Helpers/Siskaperbapo")
+const kaltim = use("App/Helpers/Kaltim")
 const MongoDb = use("App/Models/MongoDb")
 const moment = require('moment');
 const Env = use('Env');
@@ -11,6 +12,27 @@ const $HOME = Env.get('PATH_DIR')
 const Database = use("Database");
 
 class Daily_Task {
+    async Laminetam () {
+        try {
+            var t0 = performance.now();
+            await kaltim.Laminetam();
+            var t1 = performance.now();
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0);
+        } catch (error) {
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+        }
+    }
+
+    async Cctvkaltim () {
+        try {
+            var t0 = performance.now();
+            await kaltim.Generate_link_cctv_kaltim();
+            var t1 = performance.now();
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0);
+        } catch (error) {
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+        }
+    }
 
     async InsertLast2Day () {
         const now = moment().utcOffset('+0700').format('YYYY-MM-DDT00:00:00Z');
