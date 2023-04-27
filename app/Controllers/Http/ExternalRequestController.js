@@ -109,6 +109,22 @@ class ExternalRequestController {
         const result = await Maritim.area_maritim();
         return response.json(result);
     }
+
+    async list_cam ({request,response}) {
+        let a = await Anpr.List_Camera()
+        return response.json(a)
+    }
+
+    async Vehicle_Record_Overview ({request,response}) {
+        let a = await Anpr.Vehicle_Record_Overview()
+        return response.json(a)
+    }
+
+    async Vehicle_Record ({request,response}) {
+        let {cam} = request.all()
+        let a = await Anpr.Vehicle_Record(cam)
+        return response.json(a)
+    }
 }
 
 module.exports = ExternalRequestController

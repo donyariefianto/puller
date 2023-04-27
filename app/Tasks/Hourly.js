@@ -11,7 +11,7 @@ class Hourly extends Task {
 
   async handle () {
     if (project==='enygma') {
-      await Hourly_Task.Generate_Anpr();
+      // await Hourly_Task.Generate_Anpr();
       await Hourly_Task.Generate_Anpr_Datasets();
     }
   }

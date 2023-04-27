@@ -29,6 +29,9 @@ Route.group(() => {
     Route.get('/media-list','DetermController.MediaTool')
     Route.get('/media-feed','DetermController.MediaTool')
     Route.get('/media-reaction','DetermController.ReactionMediatoolkit')
+    Route.get('/list-cam','ExternalRequestController.list_cam')
+    Route.get('/overview-cam','ExternalRequestController.Vehicle_Record_Overview')
+    Route.get('/record5m-cam','ExternalRequestController.Vehicle_Record')
 
 }).prefix('service/v1')
 

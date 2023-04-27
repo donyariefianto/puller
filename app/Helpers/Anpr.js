@@ -660,7 +660,7 @@ class Anpr {
                     'Accept': 'application/json', 
                     'Content-Type': 'application/json;charset=UTF-8', 
                     'X-Ca-Key': '23039554', 
-                    'X-Ca-Signature': `${generateSignature(sk,'POST',`${base_url}/artemis/api/mobilesurveillance/v1/recordOverview`)}`
+                    'X-Ca-Signature': `${this.generateSignature(sk,'POST',`${base_url}/artemis/api/mobilesurveillance/v1/recordOverview`)}`
                 },
                 data : data,
             };
