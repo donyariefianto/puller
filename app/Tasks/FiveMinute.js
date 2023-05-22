@@ -11,6 +11,7 @@ class FiveMinute extends Task {
   }
 
   async handle () {
+    return
     if (project==='enygma') {
       await FiveMin_Task.InsertAt5RecordVehicle();
     }
