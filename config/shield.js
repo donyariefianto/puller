@@ -134,7 +134,7 @@ module.exports = {
   csrf: {
     enable: true,
     methods: ['POST', 'PUT', 'DELETE'],
-    filterUris: ['/service/v1/delete-dataset'],
+    filterUris: ['/service/v1/delete-dataset','/service/v1/update-dataset','/service/v1/deleteBy-user'],
     cookieOptions: {
       httpOnly: false,
       sameSite: true,

@@ -46,10 +46,26 @@ class MongoDb {
         return await collections.deleteMany(query);
     }
 
+    async DeleteByQueryColection (query,collection) {
+        const collections = db.collection(collection);
+        return await collections.deleteMany(query);
+    }
+
+    async UpdateByToken (token,id,data) {
+        const collections = db.collection('externaldatas');
+        return await collections.updateMany({externalDataToken:token,userId:Number(id)}, {$set:JSON.parse(data)});
+    }
+
     async InsertData (userId, id, token, data) {
         const collections = db.collection('externaldatas');
         return await collections.insertOne({userId : parseInt(userId), externalDataId : parseInt(id), externalDataToken : token, detail : data, created_at : new Date(), updated_at : new Date(), deleted_at : null});
-    } 
+    }
+
+    async InsertLogs (data) {
+        return console.log(data);
+        const collections = db.collection('logs');
+        return await collections.insertOne(data);
+    }
 
     async MultipleInsert (data) {
         const collections = db.collection('externaldatas');

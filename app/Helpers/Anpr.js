@@ -8,7 +8,7 @@ const axios = require('axios');
 var CryptoJS = require("crypto-js");
 let sk = 'BUqUMHfEPbK9GcTUl06h'
 const base_url = 'http://103.135.14.146/'
-
+const minio = use("App/Helpers/Minio");
 class Anpr {
 
     async Vehicle_Record_By_Time (cam,str,end) {
@@ -694,6 +694,43 @@ class Anpr {
         } catch (e) {
             return {status:400,message:e.message }
         }
+    }
+
+    async BackupDailyRecord () {
+        const now = moment().utcOffset('+0700')
+        let start = Processing.SubtractTime(now,1,'day')
+        let end = Processing.SubtractTime(now,1,'day')
+        start = moment(start).format('YYYY-MM-DDT00:00:00Z')
+        end = moment(end).format('YYYY-MM-DDT23:59:59Z')
+        let query = {
+            crossTime:{
+                $gte: start,
+                $lt: end
+            },
+        }
+        let hasil = await MongoDb.findANPR(query)
+        hasil = hasil.map(e=>{
+            delete e._id
+            return e
+        })
+        var buf = Buffer.from(JSON.stringify(hasil))
+        const meta =  { 'content-type': 'application/json' }
+        await minio.PutObject(`/artemis/${now}.json`,buf,meta)
+        return 'succes'        
+    }
+
+    async DeletePrevMonth () {
+        const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
+        const time = Processing.SubtractTime(now,2,'month')
+        const start = moment(time).startOf('month').format()
+        const end = moment(time).endOf('month').format()
+        const query = {
+            crossTime:{
+                $gte: start,
+                $lt: end
+            },
+        }
+        return await MongoDb.DeleteByQueryColection(query,'artmsanpr')
     }
 
     generateSignature (AS,METHOD,URL) {

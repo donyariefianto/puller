@@ -17,8 +17,7 @@ class ExternalRequestController {
     
     async Testing({ request, response}){
         let {name,id_cam,id_cam_point} = request.all()
-        const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
-        let a = await kaltim.Laminetam()
+        let a = await Anpr.DeletePrevMonth()
         return response.json(a)
     }
 
@@ -26,6 +25,15 @@ class ExternalRequestController {
         let {name,id_cam,id_cam_point} = request.all()
         let a = await kaltim.Generate_link_cctv_kaltim()
         return response.json(a)
+    }
+
+    async DeleteByUser({ request, response}){
+        let {user} = request.all()
+        if (!user) {
+            return response.api(400, "user is null")
+        }
+        const hapus = await MongoDb.DeleteByQuery({userId:Number(user)})
+        return response.json(hapus)
     }
 
     async GenerateSiskaperbapo({request, response}){
@@ -82,6 +90,15 @@ class ExternalRequestController {
             return response.status(500).json({message: "Invalid id or token"});
         }
         const hapus = await MongoDb.DeleteByToken(token,id)
+        response.json(hapus);
+    }
+
+    async UpdateAllDataset ({request, response}) {
+        let {token,id,data} = request.all();
+        if (!token || !id || !data){
+            return response.status(500).json({message: "Invalid id or token"});
+        }
+        const hapus = await MongoDb.UpdateByToken(token,id,data)
         response.json(hapus);
     }
 

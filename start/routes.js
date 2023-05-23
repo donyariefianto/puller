@@ -21,8 +21,10 @@ Route.group(() => {
     Route.get('/maritim-meta','ExternalRequestController.GetMaritimMeta')
     Route.get('/maritim-area','ExternalRequestController.GetMaritimArea')
     Route.get('/generate-anpr','ExternalRequestController.GetAnpr')
+    Route.put('/update-dataset','ExternalRequestController.UpdateAllDataset')
     Route.delete('/delete-dataset','ExternalRequestController.RemoveAllDataset')
     Route.get('/generate-kai-route','ExternalRequestController.KaiRoute')
+    Route.delete('/deleteBy-user','ExternalRequestController.DeleteByUser')
 
     // MEDIA TOOL
     Route.get('/media-keyword','DetermController.ListKeyword')
@@ -32,6 +34,10 @@ Route.group(() => {
     Route.get('/list-cam','ExternalRequestController.list_cam')
     Route.get('/overview-cam','ExternalRequestController.Vehicle_Record_Overview')
     Route.get('/record5m-cam','ExternalRequestController.Vehicle_Record')
+
+    Route.get('/artemis-fr/getAllTreeCode','ArtemisFrController.getAllTreeCode')
+    Route.get('/artemis-fr/regions','ArtemisFrController.regions')
+    Route.get('/artemis-fr/regions_root','ArtemisFrController.regions_root')
 
 }).prefix('service/v1')
 
