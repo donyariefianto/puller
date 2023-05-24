@@ -62,7 +62,6 @@ class MongoDb {
     }
 
     async InsertLogs (data) {
-        return console.log(data);
         const collections = db.collection('logs');
         return await collections.insertOne(data);
     }

@@ -17,7 +17,7 @@ class ExternalRequestController {
     
     async Testing({ request, response}){
         let {name,id_cam,id_cam_point} = request.all()
-        let a = await Anpr.DeletePrevMonth()
+        let a = await Daily.BackupDailyArtemis()
         return response.json(a)
     }
 

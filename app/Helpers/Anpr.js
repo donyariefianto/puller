@@ -697,40 +697,55 @@ class Anpr {
     }
 
     async BackupDailyRecord () {
-        const now = moment().utcOffset('+0700')
-        let start = Processing.SubtractTime(now,1,'day')
-        let end = Processing.SubtractTime(now,1,'day')
-        start = moment(start).format('YYYY-MM-DDT00:00:00Z')
-        end = moment(end).format('YYYY-MM-DDT23:59:59Z')
-        let query = {
-            crossTime:{
-                $gte: start,
-                $lt: end
-            },
-        }
-        let hasil = await MongoDb.findANPR(query)
-        hasil = hasil.map(e=>{
-            delete e._id
-            return e
-        })
-        var buf = Buffer.from(JSON.stringify(hasil))
-        const meta =  { 'content-type': 'application/json' }
-        await minio.PutObject(`/artemis/${now}.json`,buf,meta)
-        return 'succes'        
+        const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
+        try {
+            var t0 = performance.now();
+            let start = Processing.SubtractTime(now,1,'day')
+            let end = Processing.SubtractTime(now,1,'day')
+            start = moment(start).format('YYYY-MM-DDT00:00:00Z')
+            end = moment(end).format('YYYY-MM-DDT23:59:59Z')
+            let query = {
+                crossTime:{
+                    $gte: start,
+                    $lt: end
+                },
+            }
+            let hasil = await MongoDb.findANPR(query)
+            hasil = hasil.map(e=>{
+                delete e._id
+                return e
+            })
+            var buf = Buffer.from(JSON.stringify(hasil))
+            const meta =  { 'content-type': 'application/json' }
+            await minio.PutObject(`/artemis/${now}.json`,buf,meta)
+            var t1 = performance.now();
+            return await Processing.Create_LogsV2('enygma','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO successfully`,t1,t0);
+        } catch (error) {
+            return await Processing.Create_LogsV2('enygma','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO ${error.message}`,0,0)
+        }      
     }
 
     async DeletePrevMonth () {
         const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
-        const time = Processing.SubtractTime(now,2,'month')
-        const start = moment(time).startOf('month').format()
-        const end = moment(time).endOf('month').format()
-        const query = {
-            crossTime:{
-                $gte: start,
-                $lt: end
-            },
+        try {
+            var t0 = performance.now();
+            const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
+            const time = Processing.SubtractTime(now,2,'month')
+            const start = moment(time).startOf('month').format()
+            const end = moment(time).endOf('month').format()
+            const query = {
+                crossTime:{
+                    $gte: start,
+                    $lt: end
+                },
+            }
+            await MongoDb.DeleteByQueryColection(query,'artmsanpr')
+            var t1 = performance.now();
+            return await Processing.Create_LogsV2('enygma','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Delete monthly artemis anpr MinIO successfully`,t1,t0)
+        } catch (error) {
+            return await Processing.Create_LogsV2('enygma','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Delete monthly artemis anpr MinIO ${error.message}`,0,0)
         }
-        return await MongoDb.DeleteByQueryColection(query,'artmsanpr')
+        
     }
 
     generateSignature (AS,METHOD,URL) {

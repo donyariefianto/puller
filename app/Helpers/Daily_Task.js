@@ -1,5 +1,6 @@
 'use strict'
 const fs = require('fs');
+const Anpr = use("App/Helpers/Anpr")
 const Maritim = use("App/Helpers/Maritim")
 const ShellScript = use("App/Helpers/ShellScript")
 const Processing = use("App/Helpers/Processing")
@@ -200,6 +201,10 @@ class Daily_Task {
         } catch (e) {
             return console.log(e.message);
         }
+    }
+
+    async BackupDailyArtemis () {
+        Anpr.BackupDailyRecord()
     }
 }
 

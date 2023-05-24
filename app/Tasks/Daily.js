@@ -6,7 +6,7 @@ const Env = use('Env')
 const project = Env.get('SERVICE_PROJECT')
 class Daily extends Task {
   static get schedule () {
-    return '0 0 6,12 */1 * *'
+    return '0 0 5,17 */1 * *'
   }
 
   async handle () {
@@ -16,6 +16,7 @@ class Daily extends Task {
       await Daily_Task.Maritim_Viewboard();
       await Daily_Task.GenerateStatsDatasets();
       await Daily_Task.GenerateMonipad();
+      await Daily_Task.BackupDailyArtemis()
     }
     if (project==='kaltim') {
       await Daily_Task.Laminetam();

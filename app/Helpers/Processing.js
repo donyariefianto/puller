@@ -148,6 +148,21 @@ class Processing {
         }
     }
 
+    async Create_LogsV2 (uid,data_id,log_type,sub_log_type,interval,created_at,message,t1,t0) {
+        let logs = {
+            uid:uid,
+            data_id:data_id,
+            log_type:log_type,
+            sub_log_type:sub_log_type,
+            interval:interval,
+            excution_time:parseInt((t1 - t0)/1000 )+ " s",
+            last_executed:moment().format('YYYY-MM-DDTHH:mm:ssZ'),
+            created_at:created_at,
+            message:message
+        }
+        return await MongoDb.InsertLogs(logs);
+    }
+
     async getAllCities(provinsi){
         var cfg = {
             method: 'get',
@@ -227,7 +242,11 @@ class Processing {
           data: bodyContent,
         }
         return await axios(reqOptions)
-      }
+    }
+
+    async DeleteDataByUser(user){
+        return MongoDb.deleteMany({userId:10});
+    }
 }
 
 module.exports = new Processing()

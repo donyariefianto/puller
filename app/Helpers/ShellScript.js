@@ -5,8 +5,60 @@ const exec = util.promisify(require('node:child_process').exec);
 const moment = require('moment');
 const MongoDb = use("App/Models/MongoDb");
 const axios = use('axios');
-
+const Anpr = use("App/Helpers/Anpr");
+const fs = require('fs');
+const Env = use('Env');
+const $HOME = Env.get('PATH_DIR')
+let credential_face_recognition = fs.readFileSync($HOME+'public/files/data_user/artemis_face_recognition.json',{encoding:'utf8'});
+const ak = JSON.parse(credential_face_recognition).data.app_key;
+const sk = JSON.parse(credential_face_recognition).data.secret_key;
+const url_artemisFR = JSON.parse(credential_face_recognition).data.base_url;
+// AFR artemis face recognition
 class ShellScript {
+
+    async afr_getAllTreeCode () {
+        const url = `${url_artemisFR}artemis/api/resource/v1/unit/getAllTreeCode`;
+        const method = 'POST';
+        const sig = Anpr.generateSignature(sk,method,url);
+        const curl = `curl --insecure --location --request POST ${url} --header Accept:application/json --header Content-Type:application/json;charset=UTF-8 --header X-Ca-Key:${ak} --header X-Ca-Signature:${sig}`
+        const { stdout, stderr } = await exec(curl);
+        return JSON.parse(stdout)
+    }
+
+    async afr_regions () {
+        const url = `${url_artemisFR}artemis/api/resource/v1/regions`;
+        const method = 'POST';
+        const sig = Anpr.generateSignature(sk,method,url);
+        let raw_body = '{"pageNo":1,"pageSize":500}'
+        raw_body = (JSON.stringify(raw_body));
+        const curl = `curl --insecure --location --request POST ${url} --header Accept:application/json --header Content-Type:application/json;charset=UTF-8 --header X-Ca-Key:${ak} --header X-Ca-Signature:${sig} --data ${raw_body}`
+        const { stdout, stderr } = await exec(curl);
+        return JSON.parse(stdout)
+    }
+
+    async afr_regions_root () {
+        const url = `${url_artemisFR}artemis/api/resource/v1/regions/root`;
+        const method = 'POST';
+        const sig = Anpr.generateSignature(sk,method,url);
+        let raw_body = '{"treeCode": "0"}'
+        raw_body = (JSON.stringify(raw_body));
+        const curl = `curl --insecure --location --request POST ${url} --header Accept:application/json --header Content-Type:application/json;charset=UTF-8 --header X-Ca-Key:${ak} --header X-Ca-Signature:${sig} --data ${raw_body}`
+        const { stdout, stderr } = await exec(curl);
+        return JSON.parse(stdout)
+    }
+
+    async afr_list_of_lower () {
+        // Get the List of Lower-Level Organizations with Camera Resources by Organization Code
+        const url = `${url_artemisFR}artemis/api/resource/v1/unit/getChildUnitsWithCameraByUnitIndexCode`;
+        const method = 'POST';
+        console.log('l');
+        const sig = Anpr.generateSignature(sk,method,url);
+        let raw_body = '{"parentIndexCode":"root00000000","treeCode":"0"}'
+        raw_body = (JSON.stringify(raw_body));
+        const curl = `curl --insecure --location --request POST ${url} --header Accept:application/json --header Content-Type:application/json;charset=UTF-8 --header X-Ca-Key:${ak} --header X-Ca-Signature:${sig} --data ${raw_body}`
+        const { stdout, stderr } = await exec(curl);
+        return JSON.parse(stdout)
+    }
 
     async GetDataMonipad () {
         let user = 76, token = 'enygma_fzthgto', id_token = '602';
