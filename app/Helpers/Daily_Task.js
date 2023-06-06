@@ -11,15 +11,17 @@ const moment = require('moment');
 const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
 const Database = use("Database");
-
+const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
 class Daily_Task {
     async Laminetam () {
         try {
             var t0 = performance.now();
             await kaltim.Laminetam();
             var t1 = performance.now();
+            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Successfully `,t1,t0);
             await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0);
         } catch (error) {
+            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Failed ${error.message}`,0,0);
             await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
         }
     }
@@ -29,9 +31,11 @@ class Daily_Task {
             var t0 = performance.now();
             await kaltim.Generate_link_cctv_kaltim();
             var t1 = performance.now();
-            await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0);
+            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,t1,t0);
+            await Processing.Create_Logs(`Generate link cctv kaltim Daily Successfully`,"14400MINS","Scheduler1440",t1,t0);
         } catch (error) {
-            await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,0,0);
+            await Processing.Create_Logs(`Generate link cctv kaltim Daily ${error.message} `,"14400MINS","Scheduler1440",0,0);
         }
     }
 
@@ -67,38 +71,42 @@ class Daily_Task {
             var t0 = performance.now();
             await ShellScript.GetDataMonipad();
             var t1 = performance.now();
-            await Processing.Create_Logs(`Insert Daily Monipad Successfully `,"14400MINS","Scheduler1440",t1,t0);
+            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Successfully`,t1,t0);
+            await Processing.Create_Logs(`Insert Daily Monipad Successfully`,"14400MINS","Scheduler1440",t1,t0);
         } catch (error) {
             await Processing.Create_Logs(`Insert Daily Monipad Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Failed ${error.message}`,t1,t0);
         }
     }
 
     async GenerateStatsDatasets () {
-        try {
-            let user = fs.readFileSync($HOME+'public/files/data_user/stats_dataset.json',{encoding:'utf8'});
-            user = JSON.parse(user).user
-            for (const i of user) {
+        let user = fs.readFileSync($HOME+'public/files/data_user/stats_dataset.json',{encoding:'utf8'});
+        user = JSON.parse(user).user
+        for (const i of user) {
+            try {
                 var t0 = performance.now();
                 let data = await Processing.getStatistik(i);
                 const save = await Processing.SaveStatsDataset(i,'stast_dataset',data);
                 var t1 = performance.now();
                 if (save.status == 200) {
+                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Successfully`,t1,t0);
                     await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Successfully `,"14400MINS","Scheduler1440",t1,t0);
                 }else{
+                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Failed`,t1,t0);
                     await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Failed `,"14400MINS","Scheduler1440",t1,t0);
-                }
+                }                
+            } catch (error) {
+                return await Processing.Create_Logs(`Insert Daily Statistic Datasets User Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
             }
-        } catch (error) {
-            return await Processing.Create_Logs(`Insert Daily Statistic Datasets User Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
         }
     }
       
     async Maritim_Meta () {
-        try {
-            var res = []
-            let user = fs.readFileSync($HOME+'public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
-            const meta_maritim = await Maritim.meta_maritim();
-            for (const i of JSON.parse(user).data) {
+        var res = []
+        let user = fs.readFileSync($HOME+'public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
+        const meta_maritim = await Maritim.meta_maritim();
+        for (const i of JSON.parse(user).data) {
+            try {
                 var t0 = performance.now();
                 const del_meta = await MongoDb.DeleteByToken(i.meta,i.user)
                 const req_meta = await Processing.Get_ExternalDataLayers(i.meta)
@@ -106,42 +114,47 @@ class Daily_Task {
                 if (meta_maritim.length>0) {
                     const insrt_meta = await Processing.InsertByToken(meta_maritim,req_meta,'append')
                     if (insrt_meta.insertedCount > 0) {
-                    await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,t1,t0);
+                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
                     }else{
-                    await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} failed`,"14400MINS","Scheduler1440",t1,t0);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} data null`,t1,t0);
+                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} failed`,"14400MINS","Scheduler1440",t1,t0);
                     }
                 }
+            } catch (error) {
+                await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim failed ${error.message}`,0,0);
+                return await Processing.Create_Logs(`Insert Daily Record Meta Maritim failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
             }
-        } catch (error) {
-        return await Processing.Create_Logs(`Insert Daily Record Meta Maritim failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
         }
     }
 
     async Maritim_Viewboard () {
-        try {
-            var res = []
+        var res = []
             let user = fs.readFileSync($HOME+'public/files/data_user/user_enygma_maritim.json',{encoding:'utf8'});
             const viewboard_maritim = await Maritim.viewboard_maritim();
             for (const i of JSON.parse(user).data) {
-                var t0 = performance.now();
-                const del_viewboard = await MongoDb.DeleteByToken(i.viewboard,i.user)
-                const req_viewboard = await Processing.Get_ExternalDataLayers(i.viewboard)
-                var t1 = performance.now();
-                if (viewboard_maritim.length>0) {
-                    const insrt_viewboard = await Processing.InsertByToken(viewboard_maritim,req_viewboard,'append')
-                    if (insrt_viewboard.insertedCount > 0) {
-                        res.push(insrt_viewboard.insertedCount)
-                    await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"60MINS","Scheduler60",t1,t0);
-                    }else{
-                        res.push('0 '+ i.viewboard,i.user)
-                    await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} failed`,"60MINS","Scheduler60",t1,t0);
+                try {
+                    var t0 = performance.now();
+                    const del_viewboard = await MongoDb.DeleteByToken(i.viewboard,i.user)
+                    const req_viewboard = await Processing.Get_ExternalDataLayers(i.viewboard)
+                    var t1 = performance.now();
+                    if (viewboard_maritim.length>0) {
+                        const insrt_viewboard = await Processing.InsertByToken(viewboard_maritim,req_viewboard,'append')
+                        if (insrt_viewboard.insertedCount > 0) {
+                            res.push(insrt_viewboard.insertedCount)
+                            await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,t1,t0);
+                            await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"14400MINS","Scheduler1440",t1,t0);
+                        }else{
+                            res.push('0 '+ i.viewboard,i.user)
+                        await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} data null`,"14400MINS","Scheduler1440",t1,t0);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} data null`,t1,t0);
+                        }
                     }
+                } catch (error) {
+                    await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim failed ${error.message}`,0,0);
+                    return await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim failed ${error.message}`,"14400MINS","Scheduler1440",0,0);
                 }
             }
-            return res
-        } catch (error) {
-            return await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim failed ${error.message}`,"60MINS","Scheduler60",0,0);
-        }
     }
 
     async Siskaperbapo () {
@@ -191,19 +204,21 @@ class Daily_Task {
                     },'append')
                 var t1 = performance.now();
                 if (insrt_meta.insertedCount > 0) {
+                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,t1,t0);
                     await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
                 }else{
-                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} failed`,"14400MINS","Scheduler1440",t1,t0);
+                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo data null`,t1,t0);
+                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo data null`,"14400MINS","Scheduler1440",t1,t0);
                 } 
                 }
             }
-            return console.log('success siskaperbapo');
         } catch (e) {
-            return console.log(e.message);
+            await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${e.message}`,0,0);
         }
     }
 
     async BackupDailyArtemis () {
+        //logs inside backup funtion
         Anpr.BackupDailyRecord()
     }
 }

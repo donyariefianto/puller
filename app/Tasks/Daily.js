@@ -6,7 +6,7 @@ const Env = use('Env')
 const project = Env.get('SERVICE_PROJECT')
 class Daily extends Task {
   static get schedule () {
-    return '0 0 5,17 */1 * *'
+    return '0 0 18,5 * * *'
   }
 
   async handle () {

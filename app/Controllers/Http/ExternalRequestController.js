@@ -12,13 +12,19 @@ const moment = require('moment');
 const fs = require('fs');
 const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
-
+const minio = use("App/Helpers/Minio");
+const Database = use('Database')
 class ExternalRequestController {
     
     async Testing({ request, response}){
-        let {name,id_cam,id_cam_point} = request.all()
-        let a = await Daily.BackupDailyArtemis()
-        return response.json(a)
+        let data = fs.readFileSync($HOME+'public/files/blimbing.sql',{encoding:'utf8'});
+        data = data.split(';')
+        console.log(data.length);
+        for (const i of data) {
+            await Database.raw(i)
+            console.log(i);
+        }
+        return response.json('sudah')
     }
 
     async GenerateCctvKaltim({ request, response}){

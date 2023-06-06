@@ -42,7 +42,7 @@ class Anpr {
         let hasil = await MongoDb.Count_Data_Artemis({
             crossTime:{
                 $gte: start,
-                $lt: end
+                $lte: end
             },
             cameraIndexCode:id_cam
         });
@@ -50,7 +50,7 @@ class Anpr {
         let hasil_know = await MongoDb.Count_Data_Artemis({
             crossTime:{
                 $gte: start,
-                $lt: end
+                $lte: end
             },
             cameraIndexCode:id_cam,
             plateNo:{$ne:"Unknown"}
@@ -64,7 +64,7 @@ class Anpr {
         let hasil = await MongoDb.Count_Data_Artemis({
             crossTime:{
                 $gte: start,
-                $lt: end
+                $lte: end
             },
             cameraIndexCode:id_cam
         });
@@ -72,7 +72,7 @@ class Anpr {
         let hasil_know = await MongoDb.Count_Data_Artemis({
             crossTime:{
                 $gte: start,
-                $lt: end
+                $lte: end
             },
             cameraIndexCode:id_cam,
             plateNo:{$ne:"Unknown"}
@@ -707,7 +707,7 @@ class Anpr {
             let query = {
                 crossTime:{
                     $gte: start,
-                    $lt: end
+                    $lte: end
                 },
             }
             let hasil = await MongoDb.findANPR(query)
@@ -736,7 +736,7 @@ class Anpr {
             const query = {
                 crossTime:{
                     $gte: start,
-                    $lt: end
+                    $lte: end
                 },
             }
             await MongoDb.DeleteByQueryColection(query,'artmsanpr')

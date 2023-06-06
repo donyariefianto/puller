@@ -19,6 +19,25 @@ class MongoDb {
         return aggCursor
     }
 
+    async getBigData(data){
+        const mongoCollection = db.collection('externaldatas');
+        let res = [],skip = 0, limit = 100000
+        const chek = await mongoCollection.countDocuments(data)
+        if (chek>100000) {
+            for (let i = 0; i < Math.ceil(chek/100000); i++) {
+                console.time(i)
+                let temp = await mongoCollection.find(data).skip(skip).limit(limit).toArray();
+                console.log(temp.length);
+                console.timeEnd(i)
+                skip+=limit
+                res = res.concat(temp)
+            }
+            return res
+        }else{
+            return await mongoCollection.find(data).toArray();
+        }
+    }
+
     async findANPR (data) {
         const collections = db.collection('artmsanpr');
         const aggCursor = await collections.find(data).toArray();
