@@ -14,8 +14,66 @@ const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
 const minio = use("App/Helpers/Minio");
 const Database = use('Database')
+const axios = use('axios');
 class ExternalRequestController {
-    
+    async TixId ({ request, response}) {
+        try {
+            let {id,token} = request.all();
+            var FormData = require('form-data');
+            var data = new FormData();
+
+            var config = {
+            method: 'get',
+            url: 'https://api.tix.id/v1/movies/now_playing?'+'city_id='+ id,
+            headers: { 
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtc2lzZG4iOiIiLCJ1c2VyX2lkIjoiIiwiYXV0aF9zaWduIjoiZGExMTA3M2MtNDBhNS00ZWIxLWE0YTAtNzMzZjRiYTcxZTY4IiwicHVycG9zZSI6Im5vdGxvZ2luIiwiYXVkIjoiVGl4SUQgTWlkZGxld2FyZSIsImV4cCI6MTY5NTMwMjczMSwiaWF0IjoxNjg2NjYyNzMxLCJpc3MiOiJUaXhJRCBTZWN1cml0eSBBdXRob3JpdHkiLCJzdWIiOiJNb2JpbGUgYXV0aG9yaXphdGlvbiB0b2tlbiJ9.-4CvnB6rbB6GL4FetOtHarQN3QWEqMlI7Qs-dewpEhI', 
+                ...data.getHeaders()
+            },
+            data : data
+            };
+            const hasil = await axios(config)
+            
+            var send_data = []
+            for (const i of hasil.data.results) {
+                send_data.push({
+                    Custom_Unique_ID:id,
+                    Movie_Id:i.id,
+                    Data_Date: moment().format('YYYY-MM-DD'),
+                    Title:i.title,
+                    Poster:i.poster_path,
+                    production_company:i.production_company,
+                    actor:i.actor,
+                    Age_Category:i.age_category,
+                    producer: i.producer,
+                    duration:i.duration,
+                    director: i.director,
+                    trailer_path: i.trailer_path,
+                    rating_score: i.rating_score,
+                    synopsis:i.synopsis
+                })
+            }console.log(send_data.length);
+            var body_request = JSON.stringify({
+                "token": token,
+                "data": send_data,
+                "type": "append"
+            });
+            
+            var config2 = {
+            method: 'post',
+            url: 'https://api.enygma.id/v1/noAuth/multipleinsert',
+            headers: { 
+                'x-token-api': 'XNiCnLZMrfiFtQmC7mYLhT3OtuYsdm7Y', 
+                'Content-Type': 'application/json'
+            },
+            data : body_request
+            };
+            const a = await axios(config2)
+            console.log(a.data);
+            return response.json(body_request);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     async Testing({ request, response}){
         let data = fs.readFileSync($HOME+'public/files/blimbing.sql',{encoding:'utf8'});
         data = data.split(';')
@@ -27,9 +85,14 @@ class ExternalRequestController {
         return response.json('sudah')
     }
 
-    async GenerateCctvKaltim({ request, response}){
-        let {name,id_cam,id_cam_point} = request.all()
+    async GenerateCctvKaltim({response}){
         let a = await kaltim.Generate_link_cctv_kaltim()
+        return response.json(a)
+    }
+
+    async GetLaminetam({ request, response}){
+        let {name,id_cam,id_cam_point} = request.all()
+        let a = await kaltim.Laminetam()
         return response.json(a)
     }
 

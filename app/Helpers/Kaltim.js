@@ -43,8 +43,8 @@ class Kaltim {
     }
 
     async Laminetam () {
-        let token_dataset = 'enygma_jdldboflne'
-        let list_comodity = ["cat-1" ,"cat-2" ,"cat-3" ,"cat-4" ,"cat-5" ,"cat-6" ,"cat-7" ,"cat-8" ,"cat-9" ,"cat-10" ,"cat-11" ,"cat-12" ,"cat-13" ,"cat-14" ,"cat-15" ,"cat-16" ,"cat-17" ,"cat-18" ,"cat-19" ,"cat-20" ,"cat-21" ,"cat-22" ,"cat-23" ,"cat-24" ,"cat-25" ,"cat-26" ,"cat-27"]
+        let token_dataset = 'enygma_dzrcum'
+        let list_comodity = ["cat-1" ,"cat-2" ,"cat-3" ,"cat-6" ,"cat-6" ,"cat-6" ,"cat-7" ,"cat-8" ,"cat-9" ,"cat-10" ,"cat-11" ,"cat-12" ,"cat-13" ,"cat-14" ,"cat-15" ,"cat-16" ,"cat-17" ,"cat-18" ,"cat-19" ,"cat-20" ,"cat-21" ,"cat-22" ,"cat-23" ,"cat-24" ,"cat-25" ,"cat-26" ,"cat-27"]
         var result = []
         let bps = [{names:'Paser',id:6401},{names:'Kutai Barat',id:6402},{names:'Kutai Kartanegara',id:6403},{names:'Kutai Timur',id:6404},{names:'Berau',id:6405},{names:'Penajam Paser Utara',id:6409},{names:'Mahakam Ulu',id:6411},{names:'Balikpapan',id:6471},{names:'Samarinda',id:6472},{names:'Bontang',id:6474}]
         function gecolor(val,min,max,med){
@@ -98,21 +98,21 @@ class Kaltim {
             var Med_H4 = this.Median(H4,'value')
 
             for (const ii of temp2) {
-                let itemp_h1 = H2.find(e=>e.name === ii.name)
+                let itemp_h1 = H1.find(e=>e.name === ii.name)
                 let itemp_h2 = H2.find(e=>e.name === ii.name)
                 let itemp_h3 = H3.find(e=>e.name === ii.name)
                 let itemp_h4 = H4.find(e=>e.name === ii.name)
                 let find_bps = bps.find(e=>e.names === ii.name)
                 result.push({
-                    Custom_Unique_ID:find_bps?find_bps.id:'-',
+                    Custom_Unique_ID:find_bps?`${find_bps.id}-${i}`:'-',
                     Category:i,
                     Data_Date:moment().format('YYYY-MM-DD'),
-                    Id:temp.commodity,
-                    H:ii.value?Number(ii.value):'-',
-                    H1:itemp_h1.value?Number(itemp_h1.value):'-',
-                    H2:itemp_h2.value?Number(itemp_h2.value):'-',
-                    H3:itemp_h3.value?Number(itemp_h3.value):'-',
-                    H4:itemp_h4.value?Number(itemp_h4.value):'-',
+                    Title:temp.commodity,
+                    Value:ii.value?Number(ii.value):'-',
+                    Value1:itemp_h1.value?Number(itemp_h1.value):'-',
+                    Value2:itemp_h2.value?Number(itemp_h2.value):'-',
+                    Value3:itemp_h3.value?Number(itemp_h3.value):'-',
+                    Value4:itemp_h4.value?Number(itemp_h4.value):'-',
                     Color:gecolor(ii.value,Min_H,Max_H,Med_H),
                     Color1:gecolor(Number(itemp_h1.value),Min_H1,Max_H1,Med_H1),
                     Color2:gecolor(Number(itemp_h2.value),Min_H2,Max_H2,Med_H2),
@@ -122,13 +122,13 @@ class Kaltim {
                 })
             }
         }
-        // hapus 5069d4feefedf3b9c1c5207e639be1be997551d3
+        
         let delete_data = {
             method: 'delete',
             maxBodyLength: Infinity,
             url: 'https://senada.kaltimprov.go.id/api/v1/noAuth/destroyAll/117',
             data : {
-                token:'enygma_jdldboflne'
+                token:token_dataset
             }
         };
         await axios.request(delete_data)
@@ -162,6 +162,7 @@ class Kaltim {
         }
         
         let response = await axios.request(reqOptions);
+        console.log(response.data);
         return response.data
     }
 

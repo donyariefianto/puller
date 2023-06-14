@@ -43,7 +43,9 @@ Route.group(() => {
 
 Route.get('/pbb_gresik','ExternalRequestController.pbb')
 Route.get('/testing','ExternalRequestController.Testing')
+Route.get('/testing2','ExternalRequestController.TixId')
 Route.get('/cctv-kaltim','ExternalRequestController.GenerateCctvKaltim')
+Route.get('/laminetam','ExternalRequestController.GetLaminetam')
 Route.get('/siskaperbapo','ExternalRequestController.GenerateSiskaperbapo')
 Route.get('/siskaperbapo-area','ExternalRequestController.GenerateSiskaperbapoArea')
 Route.get('/all-cities','ExternalRequestController.AllCity')
