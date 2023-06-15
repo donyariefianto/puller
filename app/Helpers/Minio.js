@@ -1,6 +1,6 @@
 'use strict'
-const Minio = require("minio")
-var fs = require('fs')
+const Minio = use("minio")
+var fs = use('fs')
 const Env = use('Env')
 const bucket = Env.get('MINIO_BUCKET')
 
