@@ -8,6 +8,14 @@ const db = client.db(db_);
 const ObjectID = require('mongodb').ObjectID
 
 class MongoDb {
+
+    async GetPilihSiapa (data) {
+        const client = new MongoClient(Env.get('URL_MONGO_PILIHSIAPA'));
+        const db = client.db(Env.get('DB_MONGO_PILIHSIAPA'));
+        const collections = db.collection('pilih-siapa');
+        return await collections.aggregate(data).toArray();
+    }
+
     async Count_Data_Artemis (data) {
         const collections = db.collection('artmsanpr');
         return await collections.countDocuments(data);

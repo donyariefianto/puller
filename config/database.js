@@ -57,6 +57,26 @@ module.exports = {
       database: Env.get('DB_DATABASE', 'adonis')
     }
   },
+  /*
+  |--------------------------------------------------------------------------
+  | MySQL PilihSiapa
+  |--------------------------------------------------------------------------
+  |
+  | Here we define connection settings for MySQL database.
+  |
+  | npm i --save mysql
+  |
+  */
+  mysql_pilihsiapa: {
+    client: 'mysql',
+    connection: {
+      host: Env.get('DB_HOST_ps'),
+      port: Env.get('DB_PORT_ps'),
+      user: Env.get('DB_USER_ps'),
+      password: Env.get('DB_PASSWORD_ps'),
+      database: Env.get('DB_DATABASE_ps')
+    }
+  },
 
   /*
   |--------------------------------------------------------------------------

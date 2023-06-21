@@ -714,7 +714,7 @@ class Anpr {
             hasil = hasil.map(e=>{
                 delete e._id
                 return e
-            })
+            }) 
             var buf = Buffer.from(JSON.stringify(hasil))
             const meta =  { 'content-type': 'application/json' }
             await minio.PutObject(`/artemis/${now}.json`,buf,meta)
