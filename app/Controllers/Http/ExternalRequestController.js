@@ -13,9 +13,94 @@ const fs = require('fs');
 const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
 const minio = use("App/Helpers/Minio");
+const pilihSiapa = use("App/Helpers/PilihSiapa");
 const Database = use('Database')
 const axios = use('axios');
 class ExternalRequestController {
+
+    async pilihSiapaPoint ({request, response}){
+        const data_mysql = await Database.connection('mysql_pilihsiapa').table('users');
+        const res = await pilihSiapa.getPilihSiapaPoint()
+        var result = []
+        for (const i of res) {
+            const getUser = data_mysql.find(e=>e.uuid == i.uuid);
+            result.push({
+                Custom_Unique_ID: getUser.uuid,
+                Data_Date: moment().format('YYYY-MM-DD'),
+                Title: getUser.name,
+                Email:getUser.email,
+                Avatar: getUser.avatar,
+                Region:i.region,
+                Election:i.election,
+                Location:i.location,
+                Value:0,
+                Data_Color:'-',
+                Mini_Info:'-',
+                Url:'-',
+                Address:'-'
+            })
+        }
+        return response.json(result)
+    }
+
+    async pilihSiapaAnswer ({request, response}) {
+        const res = await pilihSiapa.getPilihSiapaAnswer()
+        const data_mysql = await Database.connection('mysql_pilihsiapa').table('users');
+        var hasil = []
+        for (const i of res) {
+            const getUser = data_mysql.find(e=>e.uuid == i.uuid);
+            if (!i.initiate_at) {
+                i.initiate_at = getUser.created_at;
+            }
+            for (const ii of i.answer) {
+                for (const iii of ii.answer) {
+                    hasil.push({
+                        Custom_Unique_ID: i.uuid,
+                        Data_Date: moment().format('YYYY-MM-DD'),
+                        Title: getUser.name,
+                        Email:getUser.email,
+                        Avatar: getUser.avatar,
+                        Region:i.region,
+                        Id_Carousel: i.id_carousel,
+                        Id_Question: ii.id_question,
+                        Id_Card: iii.id_card,
+                        Answer:iii.type,
+                        Value:0,
+                        Created_At:i.created_at,
+                        Initiate_At:getUser.created_at,
+                    })
+                }
+                
+            }
+        }
+        return response.json(hasil)
+    }
+
+    async pilihSiapaQuestion ({request, response}) {
+        let {id} = request.all()
+        const res = await pilihSiapa.getPilihSiapaQuestions(id)
+        return response.json(res)
+    }
+
+    async pilihSiapaClaim ({request, response}) {
+        let {id} = request.all();
+        let res = await pilihSiapa.getPilihSiapaClaim()
+        res =  res.map(e=>{
+            return {
+                Custom_Unique_ID: e.uuid,
+                Data_Date: moment().format('YYYY-MM-DD'),
+                Object_Id: e._id,
+                Phone:e.phone,
+                Id_Carousel:e.id_carousel,
+                Region:e.region,
+                Created_At:e.created_at,
+                Reward:e.reward_type,
+                Status:e.status
+            }
+        })
+        return response.json(res)
+    }
+
     async TixId ({ request, response}) {
         try {
             let {id,token} = request.all();
@@ -74,6 +159,16 @@ class ExternalRequestController {
             console.log(error.message);
         }
     }
+
+    async Monipad ({response}) {
+        try {
+            const data = await ShellScript.GetDataMonipad();
+            return response.json(data)
+        } catch (error) {
+            return response.json(error.message);
+        }
+    }
+    
     async Testing({ request, response}){
         let data = fs.readFileSync($HOME+'public/files/blimbing.sql',{encoding:'utf8'});
         data = data.split(';')
