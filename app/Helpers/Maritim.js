@@ -171,14 +171,14 @@ class Maritim {
                         Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
                         Nama_Perairan:i2.properties.WP_IMM,
                         Data_Date:moment().format('YYYY-MM-DD'),
-                        Value:rslt.gelombang.gelombang_max?rslt.gelombang.gelombang_max:0,
-                        Value2:rslt2.gelombang.gelombang_max?rslt2.gelombang.gelombang_max:0,
-                        Value3:rslt3.gelombang.gelombang_max?rslt3.gelombang.gelombang_max:0,
-                        Value4:rslt4.gelombang.gelombang_max?rslt4.gelombang.gelombang_max:0,
-                        Color:rslt.gelombang.color?rslt.gelombang.color:0,
-                        Color2:rslt2.gelombang.color?rslt2.gelombang.color:0,
-                        Color3:rslt3.gelombang.color?rslt3.gelombang.color:0,
-                        Color4:rslt4.gelombang.color?rslt4.gelombang.color:0
+                        Value:rslt?rslt.gelombang.gelombang_max:0,
+                        Value2:rslt2?rslt2.gelombang.gelombang_max:0,
+                        Value3:rslt3?rslt3.gelombang.gelombang_max:0,
+                        Value4:rslt4?rslt4.gelombang.gelombang_max:0,
+                        Color:rslt?rslt.gelombang.color:0,
+                        Color2:rslt2?rslt2.gelombang.color:0,
+                        Color3:rslt3?rslt3.gelombang.color:0,
+                        Color4:rslt4?rslt4.gelombang.color:0
                     })
                 }
             }
