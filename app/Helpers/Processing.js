@@ -148,17 +148,18 @@ class Processing {
         }
     }
 
-    async Create_LogsV2 (uid,data_id,log_type,sub_log_type,interval,created_at,message,t1,t0) {
+    async Create_LogsV2 (uid,data_id,log_type,sub_log_type,interval,created_at,message,t1,t0,status) {
         let logs = {
             uid:uid,
             data_id:data_id,
             log_type:log_type,
             sub_log_type:sub_log_type,
             interval:interval,
-            excution_time:parseInt((t1 - t0)/1000 )+ " s",
+            excution_time:(Number(t0) - Number(t1))/1000+ " s",
             last_executed:moment().format('YYYY-MM-DDTHH:mm:ssZ'),
             created_at:created_at,
-            message:message
+            message:message,
+            status:status
         }
         return await MongoDb.InsertLogs(logs);
     }
@@ -242,6 +243,10 @@ class Processing {
           data: bodyContent,
         }
         return await axios(reqOptions)
+    }
+
+    async DeleteFullCollections (Collection) {
+        return MongoDb.DeleteFullCollection(Collection);
     }
 
     async DeleteDataByUser(user){

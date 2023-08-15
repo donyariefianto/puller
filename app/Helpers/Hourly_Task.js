@@ -62,13 +62,13 @@ class Hourly_Task {
             }
             var t1 = performance.now();
             // await Processing.Create_Logs(`Generate 1 Hour Record Vehicle Cam ${i.data.id_cam} User ${i.user_id} successfully`,"60MINS","Scheduler60",t1,t0);
-            await Processing.Create_LogsV2(i.user_id,Number(i.externalDataId),'scheduler','scheduler_dataset','hourly',now,`Generate 1 Hour Record Vehicle Cam ${cam.id_cam} User ${i.user_id} successfully`,t1,t0);
+            await Processing.Create_LogsV2(i.user_id,Number(i.externalDataId),'scheduler','scheduler_dataset','hourly',now,`Generate 1 Hour Record Vehicle Cam ${cam.id_cam} User ${i.user_id} successfully`,t1,t0,true);
           }
           await MOngodb.DeleteByToken(i.token,23)
           await MOngodb.MultipleInsert(res);
         }
       } catch (error) {
-        await Processing.Create_LogsV2(i.user_id,Number(i.externalDataId),'scheduler','scheduler_dataset','hourly',now,`Generate 1 Hour Record Vehicle failed Erro: ${error.message}`,0,0);
+        await Processing.Create_LogsV2(i.user_id,Number(i.externalDataId),'scheduler','scheduler_dataset','hourly',now,`Generate 1 Hour Record Vehicle failed Erro: ${error.message}`,0,0,false);
         // await Processing.Create_Logs(`Generate 1 Hour Record Vehicle failed ${error.message}`,"60MINS","Scheduler60",0,0);
       }
     }

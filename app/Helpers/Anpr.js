@@ -719,9 +719,9 @@ class Anpr {
             const meta =  { 'content-type': 'application/json' }
             await minio.PutObject(`/artemis/${now}.json`,buf,meta)
             var t1 = performance.now();
-            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO successfully`,t1,t0);
+            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO successfully`,t1,t0,true);
         } catch (error) {
-            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO ${error.message}`,0,0)
+            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','daily',now,`Backup daily artemis anpr MinIO ${error.message}`,0,0,false)
         }      
     }
 
@@ -741,9 +741,9 @@ class Anpr {
             }
             await MongoDb.DeleteByQueryColection(query,'artmsanpr')
             var t1 = performance.now();
-            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','monthly',now,`Delete monthly artemis anpr MinIO successfully`,t1,t0)
+            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','monthly',now,`Delete monthly artemis anpr MinIO successfully`,t1,t0,true)
         } catch (error) {
-            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','monthly',now,`Delete monthly artemis anpr MinIO ${error.message}`,0,0)
+            return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','monthly',now,`Delete monthly artemis anpr MinIO ${error.message}`,0,0,false)
         }
         
     }

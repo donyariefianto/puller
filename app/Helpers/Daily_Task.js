@@ -18,11 +18,11 @@ class Daily_Task {
             var t0 = performance.now();
             await kaltim.Laminetam();
             var t1 = performance.now();
-            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Successfully `,t1,t0);
-            await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0);
+            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Successfully `,t1,t0,true);
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Successfully `,"14400MINS","Scheduler1440",t1,t0,true);
         } catch (error) {
-            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Failed ${error.message}`,0,0);
-            await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+            await Processing.Create_LogsV2(117,'enygma_jdldboflne','scheduler','scheduler_dataset','daily',now,`Insert Daily Meta Laminetam Failed ${error.message}`,0,0,false);
+            await Processing.Create_Logs(`Insert Daily Meta Laminetam Failed ${error.message} `,"14400MINS","Scheduler1440",0,0,false);
         }
     }
 
@@ -31,11 +31,11 @@ class Daily_Task {
             var t0 = performance.now();
             await kaltim.Generate_link_cctv_kaltim();
             var t1 = performance.now();
-            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,t1,t0);
-            await Processing.Create_Logs(`Generate link cctv kaltim Daily Successfully`,"14400MINS","Scheduler1440",t1,t0);
+            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,t1,t0,true);
+            await Processing.Create_Logs(`Generate link cctv kaltim Daily Successfully`,"14400MINS","Scheduler1440",t1,t0,true);
         } catch (error) {
-            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,0,0);
-            await Processing.Create_Logs(`Generate link cctv kaltim Daily ${error.message} `,"14400MINS","Scheduler1440",0,0);
+            await Processing.Create_LogsV2(117,'enygma_yqufjoj','scheduler','scheduler_dataset','daily',now,`Generate link cctv kaltim Daily Successfully`,0,0,false);
+            await Processing.Create_Logs(`Generate link cctv kaltim Daily ${error.message} `,"14400MINS","Scheduler1440",0,0,false);
         }
     }
 
@@ -71,11 +71,11 @@ class Daily_Task {
             var t0 = performance.now();
             await ShellScript.GetDataMonipad();
             var t1 = performance.now();
-            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Successfully`,t1,t0);
-            await Processing.Create_Logs(`Insert Daily Monipad Successfully`,"14400MINS","Scheduler1440",t1,t0);
+            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Successfully`,t1,t0,true);
+            await Processing.Create_Logs(`Insert Daily Monipad Successfully`,"14400MINS","Scheduler1440",t1,t0,true);
         } catch (error) {
-            await Processing.Create_Logs(`Insert Daily Monipad Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
-            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Failed ${error.message}`,t1,t0);
+            await Processing.Create_Logs(`Insert Daily Monipad Failed ${error.message} `,"14400MINS","Scheduler1440",0,0,false);
+            await Processing.Create_LogsV2(76,'enygma_fzthgto','scheduler','scheduler_dashboard','daily',now,`Insert Daily Monipad Failed ${error.message}`,t1,t0,true);
         }
     }
 
@@ -89,14 +89,14 @@ class Daily_Task {
                 const save = await Processing.SaveStatsDataset(i,'stast_dataset',data);
                 var t1 = performance.now();
                 if (save.status == 200) {
-                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Successfully`,t1,t0);
-                    await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Successfully `,"14400MINS","Scheduler1440",t1,t0);
+                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Successfully`,t1,t0,true);
+                    await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Successfully `,"14400MINS","Scheduler1440",t1,t0,true);
                 }else{
-                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Failed`,t1,t0);
-                    await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Failed `,"14400MINS","Scheduler1440",t1,t0);
+                    await Processing.Create_LogsV2(i,null,'scheduler','scheduler_dashboard','daily',now,`Insert Daily Statistic Datasets User ${i} Failed`,t1,t0,true);
+                    await Processing.Create_Logs(`Insert Daily Statistic Datasets User ${i} Failed `,"14400MINS","Scheduler1440",t1,t0,true);
                 }                
             } catch (error) {
-                return await Processing.Create_Logs(`Insert Daily Statistic Datasets User Failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+                return await Processing.Create_Logs(`Insert Daily Statistic Datasets User Failed ${error.message} `,"14400MINS","Scheduler1440",0,0,false);
             }
         }
     }
@@ -114,16 +114,16 @@ class Daily_Task {
                 if (meta_maritim.length>0) {
                     const insrt_meta = await Processing.InsertByToken(meta_maritim,req_meta,'append')
                     if (insrt_meta.insertedCount > 0) {
-                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,t1,t0);
-                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,t1,t0,true);
+                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0,true);
                     }else{
-                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} data null`,t1,t0);
-                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} failed`,"14400MINS","Scheduler1440",t1,t0);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim User ${i.user} data null`,t1,t0,true);
+                        await Processing.Create_Logs(`Insert Daily Record Meta Maritim User ${i.user} failed`,"14400MINS","Scheduler1440",t1,t0,true);
                     }
                 }
             } catch (error) {
-                await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim failed ${error.message}`,0,0);
-                return await Processing.Create_Logs(`Insert Daily Record Meta Maritim failed ${error.message} `,"14400MINS","Scheduler1440",0,0);
+                await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Maritim failed ${error.message}`,0,0,false);
+                return await Processing.Create_Logs(`Insert Daily Record Meta Maritim failed ${error.message} `,"14400MINS","Scheduler1440",0,0,false);
             }
         }
     }
@@ -142,17 +142,17 @@ class Daily_Task {
                         const insrt_viewboard = await Processing.InsertByToken(viewboard_maritim,req_viewboard,'append')
                         if (insrt_viewboard.insertedCount > 0) {
                             res.push(insrt_viewboard.insertedCount)
-                            await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,t1,t0);
-                            await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"14400MINS","Scheduler1440",t1,t0);
+                            await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,t1,t0,true);
+                            await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} InsertCount : ${insrt_viewboard.insertedCount}`,"14400MINS","Scheduler1440",t1,t0,true);
                         }else{
                             res.push('0 '+ i.viewboard,i.user)
-                        await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} data null`,"14400MINS","Scheduler1440",t1,t0);
-                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} data null`,t1,t0);
+                        await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim User ${i.user} data null`,"14400MINS","Scheduler1440",t1,t0,true);
+                        await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim User ${i.user} data null`,t1,t0,true);
                         }
                     }
                 } catch (error) {
-                    await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim failed ${error.message}`,0,0);
-                    return await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim failed ${error.message}`,"14400MINS","Scheduler1440",0,0);
+                    await Processing.Create_LogsV2(i.user,i.token,'scheduler','scheduler_dataset','daily',now,`Insert Daily Record Viewboard Maritim failed ${error.message}`,0,0,false);
+                    return await Processing.Create_Logs(`Insert Daily Record Viewboard Maritim failed ${error.message}`,"14400MINS","Scheduler1440",0,0,false);
                 }
             }
     }
@@ -204,22 +204,22 @@ class Daily_Task {
                     },'append')
                 var t1 = performance.now();
                 if (insrt_meta.insertedCount > 0) {
-                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,t1,t0);
-                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0);
+                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,t1,t0,true);
+                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo ${i.detail.Custom_Unique_ID} InsertCount : ${insrt_meta.insertedCount}`,"1440MINS","Scheduler1440",t1,t0,true);
                 }else{
-                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo data null`,t1,t0);
-                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo data null`,"14400MINS","Scheduler1440",t1,t0);
+                    await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo data null`,t1,t0,true);
+                    await Processing.Create_Logs(`Insert Daily Record Meta Siskaperbapo data null`,"14400MINS","Scheduler1440",t1,t0,true);
                 } 
                 }
             }
         } catch (e) {
-            await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${e.message}`,0,0);
+            await Processing.Create_LogsV2(76,'enygma_irxflin','scheduler','scheduler_dataset','daily',now,`Insert Daily Record Meta Siskaperbapo ${e.message}`,0,0,false);
         }
     }
 
     async BackupDailyArtemis () {
         //logs inside backup funtion
-        Anpr.BackupDailyRecord()
+        return Anpr.BackupDailyRecord()
     }
 }
 
