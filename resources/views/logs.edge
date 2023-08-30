@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Logs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container p-4">
+      <div class="card mx-auto p-2">
+        <div class="p-3">
+          <table class="table" class="display" id="logs">
+            <thead>
+              <tr>
+                  <th>UID</th>
+                  <th>Data ID</th>
+                  <th>Log Type</th>
+                  <th>Sub Log Type</th>
+                  <th>Interval</th>
+                  <th>Execution Time</th>
+                  <th>last Execution Time</th>
+                  <th>Created At</th>
+                  <th>Message</th>
+                  <th>Status</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>UID</th>
+                <th>Data ID</th>
+                <th>Log Type</th>
+                <th>Sub Log Type</th>
+                <th>Interval</th>
+                <th>Execution Time</th>
+                <th>last Execution Time</th>
+                <th>Created At</th>
+                <th>Message</th>
+                <th>Status</th>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function(){
+    var dataTable = $('#logs').DataTable({
+      'processing' : true,
+      'serverSide' : true,
+      'serverMethod' : 'post',
+      'ajax' : {
+          'url' : 'http://127.0.0.1:3333/service/v1/logs'
+      },
+      'order':[],
+      'aaSorting' : [],
+      'columns' : [
+        { data : 'uid' },
+        { data : 'data_id' },
+        { data : 'log_type' },
+        { data : 'sub_log_type' },
+        { data : 'interval' },
+        { data : 'execution_time' },
+        { data : 'last_executed' },
+        { data : 'created_at' },
+        { data : 'message' },
+        { data : 'status' },
+      ],
+      initComplete: function () {
+        this.api().columns().every(function () {
+          let column = this;
+          let title = column.footer().textContent;
+  
+          // Create input element
+          let input = document.createElement('input');
+          input.setAttribute("style", "background-color:white; width:100%");
+          input.placeholder = title;
+          column.footer().replaceChildren(input);
+  
+          // Event listener for user input
+          input.addEventListener('keyup', () => {
+              if (column.search() !== this.value) {
+                  column.search(input.value).draw();
+              }
+          });
+        });
+      }
+    })
+  });
+</script>

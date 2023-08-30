@@ -697,7 +697,7 @@ class Anpr {
     }
 
     async BackupDailyRecord () {
-        const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
+        let now = moment().utcOffset('+0700').format('YYYY-MM-DD')
         try {
             var t0 = performance.now();
             let start = Processing.SubtractTime(now,1,'day')
@@ -730,7 +730,7 @@ class Anpr {
         try {
             var t0 = performance.now();
             const now = moment().utcOffset('+0700').format('YYYY-MM-DD')
-            const time = Processing.SubtractTime(now,2,'month')
+            const time = Processing.SubtractTime(now,1,'month')
             const start = moment(time).startOf('month').format()
             const end = moment(time).endOf('month').format()
             const query = {

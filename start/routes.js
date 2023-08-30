@@ -23,6 +23,7 @@ Route.group(() => {
     Route.get('/generate-anpr','ExternalRequestController.GetAnpr')
     Route.put('/update-dataset','ExternalRequestController.UpdateAllDataset')
     Route.delete('/delete-dataset','ExternalRequestController.RemoveAllDataset')
+    Route.delete('/delete-pilihsiapa','ExternalRequestController.RemovePilihSaiapa')
     Route.get('/generate-kai-route','ExternalRequestController.KaiRoute')
     Route.delete('/deleteBy-user','ExternalRequestController.DeleteByUser')
 
@@ -34,13 +35,18 @@ Route.group(() => {
     Route.get('/list-cam','ExternalRequestController.list_cam')
     Route.get('/overview-cam','ExternalRequestController.Vehicle_Record_Overview')
     Route.get('/record5m-cam','ExternalRequestController.Vehicle_Record')
+    Route.get('/backup-artemis','ExternalRequestController.BackupDailyArtemis')
 
     Route.get('/artemis-fr/getAllTreeCode','ArtemisFrController.getAllTreeCode')
     Route.get('/artemis-fr/regions','ArtemisFrController.regions')
     Route.get('/artemis-fr/regions_root','ArtemisFrController.regions_root')
+    
+    Route.post('/logs','ExternalRequestController.GetLog')
 
 }).prefix('service/v1')
-
+Route.get('/dashboard','ExternalRequestController.MQTT')
+Route.get('/logs','ExternalRequestController.Logs')
+Route.get('/logs/:id','ExternalRequestController.LogStatistik')
 Route.get('/pbb_gresik','ExternalRequestController.pbb')
 Route.get('/testing','ExternalRequestController.Testing')
 Route.get('/testing2','ExternalRequestController.TixId')
@@ -52,5 +58,9 @@ Route.get('/siskaperbapo-area','ExternalRequestController.GenerateSiskaperbapoAr
 Route.get('/all-cities','ExternalRequestController.AllCity')
 Route.get('/pilih-siapa','ExternalRequestController.pilihSiapaPoint')
 Route.get('/pilih-answer','ExternalRequestController.pilihSiapaAnswer')
+Route.get('/pilih-answer2','ExternalRequestController.pilihSiapaAnswer2')
 Route.get('/pilih-question','ExternalRequestController.pilihSiapaQuestion')
 Route.get('/pilih-claim','ExternalRequestController.pilihSiapaClaim')
+Route.get('/surveyor-count','ExternalRequestController.CountSurveyor')
+Route.delete('/delete-collection','ExternalRequestController.DeleteCollection')
+Route.get('/test','ExternalRequestController.test')

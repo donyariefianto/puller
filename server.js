@@ -25,4 +25,4 @@ new Ignitor(require('@adonisjs/fold'))
   .catch(console.error)
 
 const scheduler = use('Adonis/Addons/Scheduler')
-scheduler.run()
+// scheduler.run()

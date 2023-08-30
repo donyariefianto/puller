@@ -12,11 +12,132 @@ const moment = require('moment');
 const fs = require('fs');
 const Env = use('Env');
 const $HOME = Env.get('PATH_DIR')
-const minio = use("App/Helpers/Minio");
+const FiveMin_Task = use("App/Helpers/FiveMin_Task");
 const pilihSiapa = use("App/Helpers/PilihSiapa");
 const Database = use('Database')
 const axios = use('axios');
+const { ObjectID } = require('mongodb');
 class ExternalRequestController {
+
+    async test ({}) {
+        await FiveMin_Task.InsertAt5RecordVehicle()
+    }
+    
+
+    async SurveyorReport ({request, response}) {
+        let {list_token,kecamatan} = request.all()
+        if (!list_token) {
+            return response.status(400).json({status:400, message:"Request param [list_token] is required"})
+        }
+        list_token = list_token.split(',')
+        let resp = []
+        for (const [v,i] of list_token.entries()) {
+            var result = {}
+            const Data_Mongo = await MongoDb.findExternalData({externalDataToken:i})
+            const data_mysql = await Database.connection('mysql').table('external_data_layers').where('token',i)
+            const data_selesai_survey = Data_Mongo.filter(e=>{
+                if (e.detail.Color === 'green') {
+                    return e
+                }
+            })
+            const nama_surveyor = JSON.parse(data_mysql[0].parameter).find(e=> e.parameter == "Nama_Surveyor")
+            result.Custom_Unique_ID = v+1
+            result.date = moment().format('DD-MM-YYYY')
+            result.kelurahan = data_mysql[0].name.split(' ')[data_mysql[0].name.split(' ').length-1]
+            result.kecamatan = Data_Mongo[0].detail.Kecamatan
+            result.nama_surveyor = nama_surveyor.list
+            result.jumlah_nop = Data_Mongo ? Data_Mongo.length : 0
+            result.jumlah_nop_selesai_survey = data_selesai_survey ? data_selesai_survey.length : 0
+            result.presentase = data_selesai_survey&&Data_Mongo ? (data_selesai_survey.length/Data_Mongo.length * 100).toFixed(2) : 0
+            resp.push(result)
+        }
+        if (kecamatan) {
+            resp = resp.filter(e=>e.kecamatan.toLocaleLowerCase() == kecamatan.toLocaleLowerCase())
+        }
+        return response.json(resp)
+    }
+
+    async Logs ({request,view}) {
+        return view.render('logs', {})
+    }
+
+    async MQTT ({request,view}) {
+        return view.render('socket', {})
+    }
+
+    async LogStatistik ({params,view}) {
+        let data = fs.readFileSync($HOME+'public/files/life-expectancy-table.json',{encoding:'utf8'})        
+        return view.render('logs_id', {data:JSON.parse(data)})
+    }
+
+    async GetLog ({request,response}) {
+        response.header('Access-Control-Allow-Origin', '*')
+        let {draw,start,length,order,columns} = request.all()
+        const getcolumn = columns
+        columns = columns.filter(e=>{
+            if(!e.search.value == ''){
+                return e
+            }
+        })
+        let query={},or=[],sort = {_id:-1}
+        for (const i of columns) {
+            switch (i.data) {
+                case "uid":
+                    query['uid'] = Number(i.search.value)
+                    break;
+                case "data_id":
+                    query[i.data] = Number(i.search.value)
+                    break;
+                default:
+                    const temp = {}
+                    temp[i.data] = {$regex:i.search.value}
+                    or.push(temp)
+                    break;
+            }
+        }
+        if (or[0]) {
+            query.$or=or
+        }
+        if (order) {
+            sort = {}
+            sort[getcolumn[Number(order[0].column)].data] = order[0].dir == 'asc' ? 1 : -1
+        }
+        let length_data = await MongoDb.GetLogsLength(query)
+        let data =  await MongoDb.GetLogs(query,Number(start),Number(length),sort)
+        data = data.map(e=>{
+            return {
+                uid:e.uid,
+                data_id:e.data_id,
+                log_type:e.log_type,
+                sub_log_type:e.sub_log_type,
+                interval:e.interval,
+                execution_time:e.excution_time,
+                last_executed:e.last_executed,
+                created_at:e.created_at,
+                message:e.message,
+                status:e.status?e.status:false
+            }
+        })
+        return response.json({draw:draw,iTotalRecords:length_data,iTotalDisplayRecords:length_data,aaData:data})
+    }
+
+    async DeleteCollection ({request,response}) {
+        let {collection} = request.all()
+        if (!collection) {
+            return response.status(400).json({status:400, message:"collection not found"})
+        }
+        let result = await Processing.DeleteFullCollections(collection);
+        return response.json(result)
+    }
+
+    async UpdateByCollection ({request,response}) {
+        let {collection} = request.all()
+        if (!collection) {
+            return response.status(400).json({status:400, message:"collection not found"})
+        }
+        let result = await Processing.UpdateDataByCollection(collection, query, newvalues);
+        return response.json(result)
+    }
 
     async pilihSiapaPoint ({request, response}){
         const data_mysql = await Database.connection('mysql_pilihsiapa').table('users');
@@ -74,6 +195,16 @@ class ExternalRequestController {
             }
         }
         return response.json(hasil)
+    }
+
+    async pilihSiapaAnswer2 ({request, response}) {
+        let res = await pilihSiapa.getPilihSiapaAnswer()
+        res = res.map(e=>{
+            e.answer = JSON.stringify(e.answer)
+            return e
+        })
+
+        return response.json(res)
     }
 
     async pilihSiapaQuestion ({request, response}) {
@@ -170,12 +301,22 @@ class ExternalRequestController {
     }
     
     async Testing({ request, response}){
-        let data = fs.readFileSync($HOME+'public/files/blimbing.sql',{encoding:'utf8'});
-        data = data.split(';')
-        console.log(data.length);
-        for (const i of data) {
-            await Database.raw(i)
-            console.log(i);
+        // let data = fs.readFileSync($HOME+'public/files/blimbing.sql',{encoding:'utf8'});
+        // data = data.split(';')
+        // console.log(data.length);
+        // for (const i of data) {
+        //     await Database.raw(i)
+        //     console.log(i);
+        // }
+        var token = ["","","","","","","","","","","","","","","","enygma_cnmceupmo","","","","","","enygma_kjhytbhgf","","","enygma_nsrmlfp","","","","","","","","","","enygma_cvfpjdp","","","","","","","","","","","enygma_edpsxqwfgn","","","","","","","",""]
+        var object = [264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,315,316,317,322,323]
+        for (const [ii,i] of object.entries()) {
+            var temp_array = []
+            let temp = await MongoDb.GetDataByCollection('dataset_access',{uid:i})
+            temp = temp.include.split(',')
+            temp.push(token[ii])
+            const newval = {include:temp.toString()}
+            // await MongoDb.UpdateDataByCollection('dataset_access',{uid:i},newval)
         }
         return response.json('sudah')
     }
@@ -257,6 +398,12 @@ class ExternalRequestController {
         response.json(hapus);
     }
 
+    async RemovePilihSaiapa ({request, response}) {
+        let query = request.all();
+        const hapus = await MongoDb.DeletePilihSiapa(query)
+        response.json(hapus);
+    }
+
     async UpdateAllDataset ({request, response}) {
         let {token,id,data} = request.all();
         if (!token || !id || !data){
@@ -305,6 +452,41 @@ class ExternalRequestController {
         let {cam} = request.all()
         let a = await Anpr.Vehicle_Record(cam)
         return response.json(a)
+    }
+
+    async BackupDailyArtemis ({request,response}){
+        let {cam} = request.all()
+        let a = await Daily.BackupDailyArtemis()
+        return response.json(a)
+    }
+
+    async CountSurveyor ({request,response}) {
+        let {token} = request.all()
+        if (!token) {
+            return response.status(400).json({status:400, message:"Invalid request Token"})
+        }
+        async function getResultWeekly(){
+            const data_mysql = await Database.table('external_data_layers').where('token',token).whereNull('deleted_at').first()
+            var day = [], result_object = {
+                custom_unique_id:1,
+                data_date:moment().format('YYYY-MM-DD'),
+                token:data_mysql.token,
+                title:data_mysql.name.split(' ')[data_mysql.name.split(' ').length-1]
+            },total=0
+            for (let i = 0; i < 7; i++) {
+                day.push(moment().subtract(i, "days").format('YYYY-MM-DD'))
+            }
+            for (const i of day) {
+                const query = {externalDataToken:token,"detail.Data_Date":i}
+                const data = await MongoDb.CountCustom(query,'externaldatas')
+                total = total + data
+                result_object[moment(i).format('YYYY-MM-DD(dddd)')] = data
+            }
+            result_object.total=total
+            return result_object
+        }
+        
+        return response.json(await getResultWeekly())
     }
 }
 
