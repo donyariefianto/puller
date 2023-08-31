@@ -155,7 +155,7 @@ class Processing {
             log_type:log_type,
             sub_log_type:sub_log_type,
             interval:interval,
-            excution_time:(Number(t0) - Number(t1))/1000+ " s",
+            excution_time:(Number(t1) - Number(t0))/1000+ " s",
             last_executed:moment().format('YYYY-MM-DDTHH:mm:ssZ'),
             created_at:created_at,
             message:message,
