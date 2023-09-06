@@ -13,6 +13,7 @@ const $HOME = Env.get('PATH_DIR')
 const Database = use("Database");
 const now = moment().utcOffset('+0700').format('YYYY-MM-DDTHH:00:00Z');
 class Daily_Task {
+    
     async Laminetam () {
         try {
             var t0 = performance.now();
