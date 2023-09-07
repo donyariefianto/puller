@@ -167,19 +167,21 @@ class Maritim {
                     var rslt2 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=2`);
                     var rslt3 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=3`);
                     // var rslt4 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=4`);
-                    prop.push({
-                        Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
-                        Nama_Perairan:i2.properties.WP_IMM,
-                        Data_Date:moment().format('YYYY-MM-DD'),
-                        Value:rslt?rslt.gelombang.gelombang_max:0,
-                        Value2:rslt2?rslt2.gelombang.gelombang_max:0,
-                        Value3:rslt3?rslt3.gelombang.gelombang_max:0,
-                        // Value4:rslt4?rslt4.gelombang.gelombang_max:0,
-                        Color:rslt?rslt.gelombang.color:0,
-                        Color2:rslt2?rslt2.gelombang.color:0,
-                        Color3:rslt3?rslt3.gelombang.color:0,
-                        // Color4:rslt4?rslt4.gelombang.color:0
-                    })
+                    if (rslt||rslt2||rslt3) {
+                        prop.push({
+                            Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
+                            Nama_Perairan:i2.properties.WP_IMM,
+                            Data_Date:moment().format('YYYY-MM-DD'),
+                            Value:rslt?rslt.gelombang.gelombang_max:0,
+                            Value2:rslt2?rslt2.gelombang.gelombang_max:0,
+                            Value3:rslt3?rslt3.gelombang.gelombang_max:0,
+                            // Value4:rslt4?rslt4.gelombang.gelombang_max:0,
+                            Color:rslt?rslt.gelombang.color:0,
+                            Color2:rslt2?rslt2.gelombang.color:0,
+                            Color3:rslt3?rslt3.gelombang.color:0,
+                            // Color4:rslt4?rslt4.gelombang.color:0
+                        })                        
+                    }
                 }
             }
         }
