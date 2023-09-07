@@ -180,7 +180,7 @@ class Maritim {
                             Color2:rslt2?rslt2.gelombang.color:0,
                             Color3:rslt3?rslt3.gelombang.color:0,
                             // Color4:rslt4?rslt4.gelombang.color:0
-                        })                        
+                        })   
                     }
                 }
             }
@@ -203,9 +203,7 @@ class Maritim {
                 var a = await axios.request(reqOptions);
                 return  a.data
            } catch (error) {
-                return {
-                    message: error.message
-                }
+                return null
            }
     }
     
