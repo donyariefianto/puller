@@ -14,6 +14,11 @@ class MongoDb {
         return await collections.find(data).skip(skip).limit(paging).sort(sort).toArray()
     }
 
+    async UpdateCustom (query,value,collection) {
+        const collections = db.collection(collection)
+        return await collections.updateMany(query, {$set: value})
+    }
+
     async CountCustom (data,collection) {
         const collections = db.collection(collection)
         return await collections.countDocuments(data)
