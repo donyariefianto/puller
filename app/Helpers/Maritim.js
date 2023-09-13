@@ -51,8 +51,8 @@ class Maritim {
                         const ico_weather2 = cuaca_detail.find(e => e.name.includes(detail_data2.cuaca.name?detail_data2.cuaca.name:'unknown'));
                         var detail_data3 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=3`)
                         const ico_weather3 = cuaca_detail.find(e => e.name.includes(detail_data3.cuaca.name?detail_data3.cuaca.name:'unknown'));
-                        // var detail_data4 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=4`)
-                        // const ico_weather4 = cuaca_detail.find(e => e.name.includes(detail_data4.cuaca.name?detail_data4.cuaca.name:'unknown'));
+                        var detail_data4 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=4`)
+                        const ico_weather4 = cuaca_detail.find(e => e.name.includes(detail_data4.cuaca.name?detail_data4.cuaca.name:'unknown'));
                         prop.push({
                             Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
                             Nama_Perairan:i2.properties.WP_IMM,
@@ -122,29 +122,29 @@ class Maritim {
                             Speed_Min:detail_data3.speed_min?detail_data3.speed_min:0,
                             Speed_Max:detail_data3.speed_max?detail_data3.speed_max:0,
                         })
-                        // prop.push({
-                        //     Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
-                        //     Nama_Perairan:i2.properties.WP_IMM,
-                        //     Data_Date:moment().format('YYYY-MM-DD'),
-                        //     Gelombang_Minimum:detail_data4.gelombang.gelombang_min?detail_data4.gelombang.gelombang_min:0,
-                        //     Gelombang_Maximum:detail_data4.gelombang.gelombang_max?detail_data4.gelombang.gelombang_max:0,
-                        //     Keterangan_Gelombang:`${detail_data4.gelombang.name?detail_data4.gelombang.name:''} / ${detail_data4.gelombang.name_eng?detail_data4.gelombang.name_eng:''}`,
-                        //     Angin:`from ${detail_data4.angin.from.name?detail_data4.angin.from.name:''} to ${detail_data4.angin.to.name?detail_data4.angin.to.name:''}`,
-                        //     Cuaca:detail_data4.cuaca.name?detail_data4.cuaca.name:0,
-                        //     Gambar_Cuaca:ico_weather4.en?ico_weather4.en:'question',
-                        //     Gambar_Gelombang:'',
-                        //     Nomor_Surat:detail_data4.nomor_surat?detail_data4.nomor_surat:0,
-                        //     Color_Gambar_Cuaca:'',
-                        //     Color_Gambar_Gelombang:detail_data4.gelombang.color?detail_data4.gelombang.color:0,
-                        //     Peringatan_Dini:detail_data4.cuaca_buruk?detail_data4.cuaca_buruk:'',
-                        //     Kondisi_Sinoptik:detail_data4.kondisi_cuaca?detail_data4.kondisi_cuaca:'',
-                        //     Gelombang_Value:detail_data4.gelombang.description?detail_data4.gelombang.description:'',
-                        //     Berlaku: detail_data4.berlaku?detail_data4.berlaku:'',
-                        //     Angin_From:detail_data4.angin_from?detail_data4.angin_from:'',
-                        //     Angin_To:detail_data4.angin_to?detail_data4.angin_to:'',
-                        //     Speed_Min:detail_data4.speed_min?detail_data4.speed_min:0,
-                        //     Speed_Max:detail_data4.speed_max?detail_data4.speed_max:0,
-                        // })
+                        prop.push({
+                            Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
+                            Nama_Perairan:i2.properties.WP_IMM,
+                            Data_Date:moment().format('YYYY-MM-DD'),
+                            Gelombang_Minimum:detail_data4.gelombang.gelombang_min?detail_data4.gelombang.gelombang_min:0,
+                            Gelombang_Maximum:detail_data4.gelombang.gelombang_max?detail_data4.gelombang.gelombang_max:0,
+                            Keterangan_Gelombang:`${detail_data4.gelombang.name?detail_data4.gelombang.name:''} / ${detail_data4.gelombang.name_eng?detail_data4.gelombang.name_eng:''}`,
+                            Angin:`from ${detail_data4.angin.from.name?detail_data4.angin.from.name:''} to ${detail_data4.angin.to.name?detail_data4.angin.to.name:''}`,
+                            Cuaca:detail_data4.cuaca.name?detail_data4.cuaca.name:0,
+                            Gambar_Cuaca:ico_weather4.en?ico_weather4.en:'question',
+                            Gambar_Gelombang:'',
+                            Nomor_Surat:detail_data4.nomor_surat?detail_data4.nomor_surat:0,
+                            Color_Gambar_Cuaca:'',
+                            Color_Gambar_Gelombang:detail_data4.gelombang.color?detail_data4.gelombang.color:0,
+                            Peringatan_Dini:detail_data4.cuaca_buruk?detail_data4.cuaca_buruk:'',
+                            Kondisi_Sinoptik:detail_data4.kondisi_cuaca?detail_data4.kondisi_cuaca:'',
+                            Gelombang_Value:detail_data4.gelombang.description?detail_data4.gelombang.description:'',
+                            Berlaku: detail_data4.berlaku?detail_data4.berlaku:'',
+                            Angin_From:detail_data4.angin_from?detail_data4.angin_from:'',
+                            Angin_To:detail_data4.angin_to?detail_data4.angin_to:'',
+                            Speed_Min:detail_data4.speed_min?detail_data4.speed_min:0,
+                            Speed_Max:detail_data4.speed_max?detail_data4.speed_max:0,
+                        })
                     }
                 }
             }
@@ -166,7 +166,7 @@ class Maritim {
                     var rslt = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=1`);
                     var rslt2 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=2`);
                     var rslt3 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=3`);
-                    // var rslt4 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=4`);
+                    var rslt4 = await this.get_detail(`https://peta-maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=${i2.properties.WP_1}&hari=4`);
                     if (rslt||rslt2||rslt3) {
                         prop.push({
                             Custom_Unique_ID:i2.properties.WP_1.replaceAll('.',''),
@@ -175,11 +175,11 @@ class Maritim {
                             Value:rslt?rslt.gelombang.gelombang_max:0,
                             Value2:rslt2?rslt2.gelombang.gelombang_max:0,
                             Value3:rslt3?rslt3.gelombang.gelombang_max:0,
-                            // Value4:rslt4?rslt4.gelombang.gelombang_max:0,
+                            Value4:rslt4?rslt4.gelombang.gelombang_max:0,
                             Color:rslt?rslt.gelombang.color:0,
                             Color2:rslt2?rslt2.gelombang.color:0,
                             Color3:rslt3?rslt3.gelombang.color:0,
-                            // Color4:rslt4?rslt4.gelombang.color:0
+                            Color4:rslt4?rslt4.gelombang.color:0
                         })   
                     }
                 }
