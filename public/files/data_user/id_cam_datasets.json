@@ -7,6 +7,7 @@
       {"name":"Pertigaan Kacuk","id_cam":"5","id_cam_point":"103"},
       {"name":"Perbatasan Batu-Malang","id_cam":"9","id_cam_point":"105"},
       {"name":"Jembatan Kali Sari","id_cam":"1","id_cam_point":"101"},
-      {"name":"Patung Kendedes","id_cam":"17","id_cam_point":"102"}
+      {"name":"Patung Kendedes","id_cam":"17","id_cam_point":"102"},
+      {"name":"Patung Kendedes","id_cam":"null","id_cam_point":"106"}
     ]
 }]
