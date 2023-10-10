@@ -172,7 +172,7 @@ class Daily_Task {
             });
             var vlnm = []
             for (var i = 0; i < 5; i++) {
-                vlnm.push(moment().subtract(i, 'days').format('YYYY-MM-DD'))
+                vlnm.push(moment().subtract(i, 'days').utcOffset('+0700').format('YYYY-MM-DD'))
             }
             
             await Database
