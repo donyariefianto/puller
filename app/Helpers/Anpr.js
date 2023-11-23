@@ -7,7 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 var CryptoJS = require("crypto-js");
 let sk = 'BUqUMHfEPbK9GcTUl06h'
-const base_url = 'http://103.135.14.146/'
+const base_url = 'https://103.135.14.146/artemis/'
 const minio = use("App/Helpers/Minio");
 class Anpr {
 
