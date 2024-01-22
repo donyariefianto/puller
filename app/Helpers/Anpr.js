@@ -7,7 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 var CryptoJS = require("crypto-js");
 let sk = 'BUqUMHfEPbK9GcTUl06h'
-const base_url = 'https://103.135.14.146/artemis'
+const base_url = 'http://103.135.14.146/artemis'
 const minio = use("App/Helpers/Minio");
 class Anpr {
 
@@ -31,7 +31,7 @@ class Anpr {
             },
             data : data,
         };
-        const datas = await axios(anpr);
+        const datas = await axios.request(anpr);
         return datas.data.data.list
     }
 
@@ -584,7 +584,7 @@ class Anpr {
                 },
                 data : data,
             };
-            const datas = await axios(anpr);
+            const datas = await axios.request(anpr);
             return {status:200,message:'success',data:datas.data.data}
         } catch (e) {
             return {status:400,message:e.message }
@@ -608,7 +608,7 @@ class Anpr {
                 },
                 data : data,
             };
-            const datas = await axios(anpr);
+            const datas = await axios.request(anpr);
             return {status:200,message:'success',data:datas.data}
         } catch (e) {
             return {status:400,message:e.message }
@@ -636,7 +636,7 @@ class Anpr {
                 },
                 data : data,
             };
-            const datas = await axios(anpr);
+            const datas = await axios.request(anpr);
             return {status:200,message:'success',data:datas.data}
         } catch (e) {
             return {status:400,message:e.message }
@@ -664,7 +664,7 @@ class Anpr {
                 },
                 data : data,
             };
-            const datas = await axios(anpr);
+            const datas = await axios.request(anpr);
             return {status:200,message:'success',data:datas.data}
         } catch (e) {
             return {status:400,message:e.message }
@@ -689,9 +689,10 @@ class Anpr {
                 },
                 data : data,
             };
-            const datas = await axios(list_cam);
+            const datas = await axios.request(list_cam);
             return {status:200,message:'success',data:datas.data.data}
         } catch (e) {
+            console.log(e);
             return {status:500,message:e.message }
         }
     }
