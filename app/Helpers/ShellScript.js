@@ -77,7 +77,7 @@ class ShellScript {
                         "Data_Date": moment().format('YYYY-MM-DD'),
                         "Label":i.LABEL,
                         "SKT":i.SKT,
-                        "Sisa_Hari":JSON.parse(stdout).data.sisahari,
+                        "Sisa_Hari":JSON.parse(stdout).data.sisahari.JMLHRSISAKERJA,
                         "Target":Number(i.TARGET),
                         "Hari_Lalu":Number(i.HARILALU),
                         "Pro_Hari_Lalu":Number(i.PRO_HARILALU),
