@@ -7,7 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 var CryptoJS = require("crypto-js");
 let sk = 'BUqUMHfEPbK9GcTUl06h'
-const base_url = 'http://103.135.14.146/artemis'
+const base_url = 'https://103.135.14.146/artemis'
 const minio = use("App/Helpers/Minio");
 class Anpr {
 
@@ -690,6 +690,7 @@ class Anpr {
                 data : data,
             };
             const datas = await axios.request(list_cam);
+            console.log(`${base_url}/artemis/api/resource/v1/cameras`);
             return {status:200,message:'success',data:datas.data.data}
         } catch (e) {
             console.log(e);
@@ -747,6 +748,21 @@ class Anpr {
             return await Processing.Create_LogsV2('23','S3(MinIO)','scheduler','scheduler_dataset','monthly',now,`Delete monthly artemis anpr MinIO ${error.message}`,0,0,false)
         }
         
+    }
+
+    async GetAnprRecordByTime (start,end,id_cam,skip,paging,sort) {
+        let collection = "artmsanpr",
+        query = {
+            crossTime:{
+                $gte: start,
+                $lte: end
+            }
+        }
+        if (id_cam) {
+            query.cameraIndexCode = id_cam
+        }
+        let hasil = await MongoDb.GetCustom(query,collection,skip,paging,sort);
+        return hasil
     }
 
     generateSignature (AS,METHOD,URL) {

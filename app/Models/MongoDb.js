@@ -19,6 +19,11 @@ class MongoDb {
         return await collections.updateMany(query, {$set: value})
     }
 
+    async DeleteCustom (query,collection) {
+        const collections = db.collection(collection)
+        return await collections.deleteMany(query)
+    }
+
     async CountCustom (data,collection) {
         const collections = db.collection(collection)
         return await collections.countDocuments(data)
