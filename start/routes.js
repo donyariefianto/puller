@@ -61,6 +61,7 @@ Route.group(() => {
 Route.group(() => {
     Route.get('record-data','AnprController.AnprRecordByTime')
     Route.get('record-picture','AnprController.AnprRecordPicture')
+    Route.get('fivemins','AnprController.Anpr5Mins')
 }).prefix("/anpr/")
 
 Route.get('/dashboard','ExternalRequestController.MQTT')

@@ -1,5 +1,6 @@
 'use strict'
 const Anpr = use("App/Helpers/Anpr")
+const FiveMins = use("App/Helpers/FiveMin_Task")
 const moment = use("moment")
 
 class AnprController {
@@ -35,6 +36,11 @@ class AnprController {
         let {path} = request.all()
         var data = await Anpr.Vehicle_Picture(path)
         return response.json(data)
+    }
+
+    async Anpr5Mins ({response}) {
+        await FiveMins.InsertAt5RecordVehicle();
+        return response.json({status:200,message:"running 5 mins successfully"})
     }
 
 }
