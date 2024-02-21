@@ -1,5 +1,6 @@
 'use strict'
 const Anpr = use("App/Helpers/Anpr")
+const moment = use("moment")
 
 class AnprController {
 
@@ -14,8 +15,20 @@ class AnprController {
         end = date + "T23:59:59Z",
         sort = {'_id':-1}
         if(page == undefined){ page = 1 ,skip = 0}else{skip = (page-1)*paging }
+        var count_result = await Anpr.CountAnprRecordByTime(start,end,id_cam)
         var result = await Anpr.GetAnprRecordByTime(start,end,id_cam,skip,paging,sort)
-        return response.json(result)
+        
+        const ress = {
+            "status": 200,
+            "message": "success",
+            datetime:moment().unix(),
+            total_items:count_result,
+            page_size: paging,
+            total_pages:Math.ceil(count_result/paging),
+            page_no:Number(page),
+            data:result
+        }
+        return response.json(ress)
     }
 
     async AnprRecordPicture ({request, response}) {

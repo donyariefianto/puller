@@ -765,6 +765,21 @@ class Anpr {
         return hasil
     }
 
+    async CountAnprRecordByTime (start,end,id_cam) {
+        let collection = "artmsanpr",
+        query = {
+            crossTime:{
+                $gte: start,
+                $lte: end
+            }
+        }
+        if (id_cam) {
+            query.cameraIndexCode = id_cam
+        }
+        let hasil = await MongoDb.CountCustom(query,collection);
+        return hasil
+    }
+
     generateSignature (AS,METHOD,URL) {
         var appSecret = AS
         var textToSign = "";
