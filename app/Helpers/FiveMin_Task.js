@@ -35,7 +35,7 @@ class FiveMin_Task {
                     })
                 }
                 await this.SaveToEnygmaDataset(data_anpr_dataset)
-                // const insert = await MongoDb.MultipleInsertAnpr(temp)
+                const insert = await MongoDb.MultipleInsertAnpr(temp)
                 var t1 = performance.now();
                 if (insert.insertedCount > 0) {
                   await Processing.Create_LogsV2(23,Number(i.cameraIndexCode),'scheduler','scheduler_mongodb','fivemin',now,`Generate five minutes Record Vehicle Cam ${i.cameraIndexCode} User 23 successfully`,t1,t0,true);
