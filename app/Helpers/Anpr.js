@@ -689,11 +689,10 @@ class Anpr {
                 },
                 data : data,
             };
+            console.log(list_cam);
             const datas = await axios.request(list_cam);
-            console.log(`${base_url}/artemis/api/resource/v1/cameras`);
             return {status:200,message:'success',data:datas.data.data}
         } catch (e) {
-            console.log(e);
             return {status:500,message:e.message }
         }
     }

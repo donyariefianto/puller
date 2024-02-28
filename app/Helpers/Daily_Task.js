@@ -206,6 +206,10 @@ class Daily_Task {
         //logs inside backup funtion
         return Anpr.BackupDailyRecord()
     }
+
+    async DeleteDataExpiredTime (query,collection) {
+        return await MongoDb.DeleteCustom(query,collection)
+    }
 }
 
 module.exports = new Daily_Task()
