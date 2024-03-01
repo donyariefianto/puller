@@ -34,6 +34,7 @@ class FiveMin_Task {
                       "Country": dt.country
                     })
                 }
+                data_anpr_dataset = data_anpr_dataset.filter(x=>x.Plate_No != "Unknown")
                 await this.SaveToEnygmaDataset(data_anpr_dataset)
                 const insert = await MongoDb.MultipleInsertAnpr(temp)
                 var t1 = performance.now();
