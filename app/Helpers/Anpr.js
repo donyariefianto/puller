@@ -689,7 +689,6 @@ class Anpr {
                 },
                 data : data,
             };
-            console.log(list_cam);
             const datas = await axios.request(list_cam);
             return {status:200,message:'success',data:datas.data.data}
         } catch (e) {
