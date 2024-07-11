@@ -609,7 +609,7 @@ class Anpr {
                 data : data,
             };
             const datas = await axios.request(anpr);
-            return {status:200,message:'success',data:datas.data}
+            return datas.data
         } catch (e) {
             return {status:400,message:e.message }
         }
