@@ -75,6 +75,7 @@ class Daily_Task {
     }
 
     async GenerateStatsDatasets () {
+        return
         let user = fs.readFileSync($HOME+'public/files/data_user/stats_dataset.json',{encoding:'utf8'});
         user = JSON.parse(user).user
         for (const i of user) {

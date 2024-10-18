@@ -213,17 +213,17 @@ class Processing {
     }
 
     async getStatistik(id_user){
-        let headersList = {
-          "Accept": "*/*",
-        }
+        // let headersList = {
+        //   "Accept": "*/*",
+        // }
     
-        let reqOptions = {
-          url: `https://api.enygma.id/v1/datasets/counts/all?user=${id_user}`,
-          method: "GET",
-          headers: headersList,
-        }
-        let res = await axios(reqOptions);
-        return res.data
+        // let reqOptions = {
+        //   url: `https://api.enygma.id/v1/datasets/counts/all?user=${id_user}`,
+        //   method: "GET",
+        //   headers: headersList,
+        // }
+        // let res = await axios(reqOptions);
+        return []
     }
 
     async UpdateS3File(file,data) {

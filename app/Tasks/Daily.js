@@ -15,7 +15,7 @@ class Daily extends Task {
       await this.ManagemenExpiredData()
       await Daily_Task.GenerateMonipad();//tidak lemot
       console.log('monipad is running daily');
-      await Daily_Task.GenerateStatsDatasets();//sekitar 1 menitan dengan hasil json seperti viewboard
+      // await Daily_Task.GenerateStatsDatasets();//sekitar 1 menitan dengan hasil json seperti viewboard
       await Daily_Task.BackupDailyArtemis()//sekitar  8 detik
       console.log('artmeis is running daily');
       await Daily_Task.SiskaperbapoByMetadata();//sekitar 14 menit
